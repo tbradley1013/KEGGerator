@@ -1,0 +1,19 @@
+Package: KEGGerator
+Type: Package
+Title: Identify genomic functionality with KEGG
+Version: 0.1.0
+Authors@R: c(
+    person("Tyler", "Bradley", role = c("aut", "cre"), email = "tcb85@drexel.edu")
+    )
+Description: Using the power of KEGG and R to identify genomic functionality in a phyloseq dataset.
+License: What license is it under?
+Encoding: UTF-8
+LazyData: true
+Imports: 
+    dplyr,
+    phyloseq,
+    purrr,
+    tidyr,
+    KEGGREST,
+    tibble,
+    stringr
