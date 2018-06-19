@@ -1,9 +1,8 @@
-## DOESN"T WORK YET
 #' Filter out genomes by pathway
 #'
 #' @param data a tibble that has genome_ids - likely the output from get_genome_id()
 #'
-#' @importFrom magrittr %>%
+#' @export
 filter_genome_by_pathway <- function(data, pathway_name){
   pathway_ids <- kegg_pathways %>%
     dplyr::filter(stringr::str_detect(pathway, pathway_name)) %>%
@@ -17,9 +16,19 @@ filter_genome_by_pathway <- function(data, pathway_name){
         kegg_link_safe("pathway", .x)
       }),
       # pathway = purrr::map(pathway, ~purrr::discard(.x, function(x){!stringr::str_detect(x, pathway_ids)}))
-      path = map(pathway, ~{str_replace_all(.x, "[A-z]|\\:", "") %>% .[. %in% pathway_ids]})
+      pathway = map(pathway, ~{
+        prefix <- str_replace_all(.x, "[0-9]", "") %>%
+          unique()
+
+        paths <- str_replace_all(.x, "[A-z]|\\:", "") %>%
+          .[. %in% pathway_ids] %>%
+          unique()
+
+        output <- paste0(prefix, paths)
+        return(output)
+      })
     ) %>%
-    tidyr::unnest(pathway)
+    dplyr::filter(purrr::map_lgl(pathway, ~{length(.x) > 0}))
 
   return(output)
 }
