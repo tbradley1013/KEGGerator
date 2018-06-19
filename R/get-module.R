@@ -2,10 +2,8 @@
 #'
 #' @param data a tibble that is output from get_pathway_enzymes()
 #'
-#' @importFrom magrittr %>%
-#'
 #' @export
-get_enzyme_module <- function(data){
+get_enzyme_modules <- function(data){
   if (!"tbl_df" %in% class(data)) stop("data must be of class tbl_df")
 
   if (!"enzyme_id" %in% colnames(data)) stop("data must contian a column named 'enzyme_id'")
@@ -40,10 +38,8 @@ get_enzyme_module <- function(data){
 #'
 #' @param data a tabble that is output from get_pathway_orthologies()
 #'
-#' @importFrom magrittr %>%
-#'
 #' @export
-get_orthology_module <- function(data){
+get_orthology_modules <- function(data){
   if (!"tbl_df" %in% class(data)) stop("data must be of class tbl_df")
 
   if (!"orthology_id" %in% colnames(data)) stop("data must contain a column named 'orthology_id'")

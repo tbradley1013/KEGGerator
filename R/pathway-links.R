@@ -4,7 +4,6 @@
 #' expressions are used to match the pathway so full pathway names do not have
 #' to be given
 #'
-#' @importFrom magrittr %>%
 #' @details the value passed to pathway_name is searched against the pathway
 #' column in the kegg_pathways dataset
 #'
@@ -36,7 +35,6 @@ get_pathway_modules <- function(pathway_name) {
 #' expressions are used to match the pathway so full pathway names do not have
 #' to be given.
 #'
-#' @importFrom magrittr %>%
 #' @details the value passed to pathway_name is searched against the pathway
 #' column in the kegg_pathways dataset
 #'
@@ -67,7 +65,6 @@ get_pathway_enzymes <- function(pathway_name) {
 #' expressions are used to match the pathway so full pathway names do not have
 #' to be given.
 #'
-#' @importFrom magrittr %>%
 #' @details the value passed to pathway_name is searched against the pathway
 #' column in the kegg_pathways dataset
 #'

@@ -2,11 +2,9 @@
 #'
 #' @param data either a phyloseq object or the output of tibble_tax
 #'
-#' @importFrom magrittr %>%
-#'
 #' @export
-tibble_genomes <- function(data){
-  if (class(data) == "phyloseq") data <- tibble_tax(data)
+genomes_tibble <- function(data, drop_taxa = TRUE){
+  if (class(data) == "phyloseq") data <- tax_tibble(data)
 
   if (!"tbl_df" %in% class(data)) stop("data must be either of class tbl_df or phyloseq")
 
@@ -22,12 +20,13 @@ tibble_genomes <- function(data){
   taxa_cols <- purrr::map_chr(1:(max_uncertainty + 1), ~paste0("genome", .x))
 
   output <- taxa %>%
-  {suppressWarnings(tidyr::separate(., Species, into = taxa_cols))} %>%
+    {suppressWarnings(tidyr::separate(., Species, into = taxa_cols))} %>%
     tidyr::gather(key = key, value = Species, !!dplyr::quo(taxa_cols)) %>%
     dplyr::filter(!is.na(Species)) %>%
     tidyr::unite("genome", Genus, Species, sep = " ") %>%
-    dplyr::mutate(genome = stringr::str_trim(genome)) %>%
-    dplyr::select(genome)
+    dplyr::mutate(genome = stringr::str_trim(genome))
+
+  if (drop_taxa) output <- dplyr::select(output, genome)
 
   return(output)
 }

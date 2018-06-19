@@ -8,10 +8,8 @@
 #'
 #' @param data a phyloseq object
 #'
-#' @importFrom magrittr %>%
-#'
 #' @export
-tibble_otu <- function(data) {
+otu_tibble <- function(data) {
   if (class(data) != "phyloseq") stop("data must be a phyloseq object")
 
   otu <- phyloseq::otu_table(data)
@@ -32,10 +30,8 @@ tibble_otu <- function(data) {
 #'
 #' @param data a phyloseq object
 #'
-#' @importFrom magrittr %>%
-#'
 #' @export
-tibble_tax <- function(data){
+tax_tibble <- function(data){
   if (class(data) != "phyloseq") stop("data must be a phyloseq object")
 
   tax <- phyloseq::tax_table(data)
@@ -52,10 +48,8 @@ tibble_tax <- function(data){
 #'
 #' @param data a phyloseq object
 #'
-#' @importFrom magrittr %>%
-#'
 #' @export
-tibble_sam <- function(data){
+sam_tibble <- function(data){
   sam_data <- phyloseq::sam_data(data)
 
   output <- sam_data %>%
