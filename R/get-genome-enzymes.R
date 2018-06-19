@@ -1,0 +1,36 @@
+#' Query all enzymes related to each genome in the dataset
+#'
+#' @param data a tibble with genomes and genome_id or the output from `get_genome_id()`
+#' @param pathway_enzymes a vector of pathway enzymes
+#'
+#' @details if `pathway_enzymes` is NULL (default) than all enzymes for each genome
+#' will be returned. If a vector of enzyme_ids is provided than only the enzymes related
+#' to each genome that are in this vector will be returned. This is useful if used in
+#' coordination with the output of `get_pathway_enzymes` to only include the enzymes
+#' that are related with the pathway of interest.
+#'
+#' @export
+get_genome_enzymes <- function(data, pathway_enzymes = NULL){
+  if (!"tbl_df" %in% class(data)) stop("data must be of class 'tbl_df'")
+  if (!"genome_id" %in% colnames(data)) stop("data must have column named 'genome_id'")
+
+  output <- data %>%
+    dplyr::mutate(
+      enzyme_id = purrr::map(genome_id, ~{
+        id <- stringr::str_replace(.x, "gn:", "")
+
+        enzymes <- kegg_link_safe("enzyme", id) %>%
+          unique()
+
+        if (!is.null(pathway_enzymes)) {
+          enzymes <- enzymes[enzymes %in% pathway_enzymes]
+        }
+
+        return(enzymes)
+      })
+    ) %>%
+    tidyr::unnest(enzyme_id) %>%
+    dplyr::left_join(kegg_enzymes, by = "enzyme_id")
+
+  return(output)
+}
