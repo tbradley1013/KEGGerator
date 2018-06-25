@@ -1,0 +1,78 @@
+orthology,orthology_name,modules,modules_name,func_id
+ko:K00260,"gudB, rocG",None,"Ammonia assimilation, ammonia => glutamate",NH3A1
+ko:K00261,"GLUD1_2, gdhA",md:M00740,Methylaspartate cycle,
+ko:K00262,"E1.4.1.4, gdhA",None,"Ammonia assimilation, ammonia => glutamate",NH3A1
+ko:K00264,GLT1,None,"Ammonia assimilation, ammonia => glutamine => glutamate",GLTS
+ko:K00265,gltB,None,"Ammonia assimilation, ammonia => glutamine => glutamate",GLTS
+ko:K00266,gltD,None,"Ammonia assimilation, ammonia => glutamine => glutamate",GLTS
+ko:K00284,E1.4.7.1,None,"Ammonia assimilation, ammonia => glutamine => glutamate",GLTS
+ko:K00360,nasB,md:M00531,"Assimilatory nitrate reduction, nitrate => ammonia",NO3R
+ko:K00362,nirB,md:M00530,"Dissimilatory nitrate reduction, nitrate => ammonia",NO2R
+ko:K00363,nirD,md:M00530,"Dissimilatory nitrate reduction, nitrate => ammonia",NO2R
+ko:K00366,nirA,md:M00531,"Assimilatory nitrate reduction, nitrate => ammonia",NO2R
+ko:K00367,narB,md:M00531,"Assimilatory nitrate reduction, nitrate => ammonia",NO3R
+ko:K00368,nirK,md:M00529,"Denitrification, nitrate => nitrogen",NO2R
+ko:K00370,"narG, narZ, nxrA",md:M00529,"Denitrification, nitrate => nitrogen",NO3R
+ko:K00370,"narG, narZ, nxrA",md:M00530,"Dissimilatory nitrate reduction, nitrate => ammonia",NO3R
+ko:K00370,"narG, narZ, nxrA",md:M00804,"Complete nitrification, comammox, ammonia => nitrite => nitrate",NO2O
+ko:K00371,"narH, narY, nxrB",md:M00529,"Denitrification, nitrate => nitrogen",NO3R
+ko:K00371,"narH, narY, nxrB",md:M00530,"Dissimilatory nitrate reduction, nitrate => ammonia",NO3R
+ko:K00371,"narH, narY, nxrB",md:M00804,"Complete nitrification, comammox, ammonia => nitrite => nitrate",NO2O
+ko:K00372,nasA,md:M00531,"Assimilatory nitrate reduction, nitrate => ammonia",NO3R
+ko:K00374,"narI, narV",md:M00529,"Denitrification, nitrate => nitrogen",NO3R
+ko:K00374,"narI, narV",md:M00530,"Dissimilatory nitrate reduction, nitrate => ammonia",NO3R
+ko:K00376,nosZ,md:M00529,"Denitrification, nitrate => nitrogen",N2OR
+ko:K00459,"ncd2, npd",None,None,
+ko:K00531,anfG,md:M00175,"Nitrogen fixation, nitrogen => ammonia",NF
+ko:K00926,arcC,None,None,
+ko:K01455,E3.5.1.49,None,None,
+ko:K01501,E3.5.5.1,None,None,
+ko:K01672,CA,None,None,
+ko:K01673,"cynT, can",None,None,
+ko:K01674,cah,None,None,
+ko:K01725,cynS,None,None,
+ko:K01915,"glnA, GLUL",None,"Ammonia assimilation, ammonia => glutamine => glutamate",NH3A2
+ko:K01948,CPS1,md:M00029,Urea cycle,
+ko:K02305,norC,md:M00529,"Denitrification, nitrate => nitrogen",NOR
+ko:K02567,napA,md:M00529,"Denitrification, nitrate => nitrogen",NO3R
+ko:K02567,napA,md:M00530,"Dissimilatory nitrate reduction, nitrate => ammonia",NO3R
+ko:K02568,napB,md:M00529,"Denitrification, nitrate => nitrogen",NO3R
+ko:K02568,napB,md:M00530,"Dissimilatory nitrate reduction, nitrate => ammonia",NO3R
+ko:K02575,"NRT, narK, nrtP, nasA",md:M00615,Nitrate assimilation,NO3A
+ko:K02586,nifD,md:M00175,"Nitrogen fixation, nitrogen => ammonia",NF
+ko:K02588,nifH,md:M00175,"Nitrogen fixation, nitrogen => ammonia",NF
+ko:K02591,nifK,md:M00175,"Nitrogen fixation, nitrogen => ammonia",NF
+ko:K03385,nrfA,md:M00530,"Dissimilatory nitrate reduction, nitrate => ammonia",NO2R
+ko:K04561,norB,md:M00529,"Denitrification, nitrate => nitrogen",NOR
+ko:K05601,hcp,None,None,
+ko:K10534,NR,md:M00531,"Assimilatory nitrate reduction, nitrate => ammonia",NO3R
+ko:K10535,hao,md:M00528,"Nitrification, ammonia => nitrite",NH2OHO
+ko:K10535,hao,md:M00804,"Complete nitrification, comammox, ammonia => nitrite => nitrate",NH2OHO
+ko:K10944,pmoA-amoA,md:M00174,"Methane oxidation, methanotroph, methane => formaldehyde",
+ko:K10944,pmoA-amoA,md:M00528,"Nitrification, ammonia => nitrite",NH3O
+ko:K10944,pmoA-amoA,md:M00804,"Complete nitrification, comammox, ammonia => nitrite => nitrate",NH3O
+ko:K10945,pmoB-amoB,md:M00174,"Methane oxidation, methanotroph, methane => formaldehyde",
+ko:K10945,pmoB-amoB,md:M00528,"Nitrification, ammonia => nitrite",NH3O
+ko:K10945,pmoB-amoB,md:M00804,"Complete nitrification, comammox, ammonia => nitrite => nitrate",NH3O
+ko:K10946,pmoC-amoC,md:M00174,"Methane oxidation, methanotroph, methane => formaldehyde",
+ko:K10946,pmoC-amoC,md:M00528,"Nitrification, ammonia => nitrite",NH3O
+ko:K10946,pmoC-amoC,md:M00804,"Complete nitrification, comammox, ammonia => nitrite => nitrate",NH3O
+ko:K15371,GDH2,None,"Ammonia assimilation, ammonia => glutamate",NH3A1
+ko:K15576,"nrtA, nasF, cynA",md:M00438,Nitrate/nitrite transport system,NO3A
+ko:K15577,"nrtB, nasE, cynB",md:M00438,Nitrate/nitrite transport system,NO3A
+ko:K15578,"nrtC, nasD",md:M00438,Nitrate/nitrite transport system,NO3A
+ko:K15579,"nrtD, cynD",md:M00438,Nitrate/nitrite transport system,NO3A
+ko:K15864,nirS,md:M00529,"Denitrification, nitrate => nitrogen",NO2R
+ko:K15876,nrfH,md:M00530,"Dissimilatory nitrate reduction, nitrate => ammonia",NO2R
+ko:K15877,CYP55,md:M00529,"Denitrification, nitrate => nitrogen",NOR
+ko:K17877,NIT-6,md:M00531,"Assimilatory nitrate reduction, nitrate => ammonia",NO2R
+ko:K18245,CA2,None,None,
+ko:K18246,CA4,None,None,
+ko:K19823,NAO,None,None,
+ko:K20932,K20932,None,Ammamox,NH3O2
+ko:K20933,K20933,None,Ammamox,NH3O2
+ko:K20934,K20934,None,Ammamox,NH3O2
+ko:K20932,K20932,None,Ammamox,NOR2
+ko:K20933,K20933,None,Ammamox,NOR2
+ko:K20934,K20934,None,Ammamox,NOR2
+ko:K20935,hdh,None,Ammamox,HYDR
