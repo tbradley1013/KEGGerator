@@ -3,6 +3,7 @@
 export("%>%")
 export(filter_genome_by_pathway)
 export(genomes_tibble)
+export(genomic_func_heatmap)
 export(get_enzyme_modules)
 export(get_genome_enzymes)
 export(get_genome_id)

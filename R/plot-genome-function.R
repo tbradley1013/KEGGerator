@@ -4,7 +4,27 @@
 #' interactive (via plotly), that will allow for the visualization of
 #' genomes in a given dataset that complete different functions
 #'
+#' @param data The output from either the \code{has_complete_function} or
+#' \code{has_specific_function}. If the output of \code{has_complete_function}
+#' is used, then it should be filtered to include only the desired modules
+#' prior to being passed into this function.
 #'
+#' @param otu_tibble, tax_tibble the output from \code{otu_tibble} and \code{tax_tibble},
+#' respectively.  Both of of these must be given or `ps_orig` must be specified
+#' @param ps_orig the original phyloseq object that was used to create dataset passed to
+#' the `data` argument
+#' @param interactive default TRUE; if TRUE, then the heatmap will be plotted with
+#' \code{plotly}. If FALSE, then the heatmap will be generated with \code{ggplot2}
+#' @param relative_abundance default FALSE; if TRUE the heatmap will use relative
+#' abundance as its fill color. If FALSE then abundance will be used
+#' @param abundance_threshold default NULL; The minimum abundance number required
+#' to be included in the heatmap
+#' @param relative_abundance_threshold default NULL; The minimum percent relative
+#' abundance requied to be included in the heatmap
+#'
+#' @importFrom magrittr %>%
+#'
+#' @export
 genomic_func_heatmap <- function(data, otu_tibble = NULL, tax_tibble = NULL,
                               ps_orig = NULL, interactive = TRUE,
                               relative_abundance = FALSE,

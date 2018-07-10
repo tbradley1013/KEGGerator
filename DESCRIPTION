@@ -16,5 +16,7 @@ Imports:
     tidyr,
     KEGGREST,
     tibble,
-    stringr
+    stringr,
+    ggplot2,
+    plotly
 RoxygenNote: 6.0.1
