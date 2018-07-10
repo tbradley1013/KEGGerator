@@ -170,13 +170,14 @@ genomic_func_heatmap <- function(data, otu_tibble = NULL, tax_tibble = NULL,
       )
   } else {
     output <- plot_data %>%
-      ggplot2::ggplot(aes(x = genome, y = sample, fill = z)) +
+      ggplot2::ggplot(ggplot2::aes(x = genome, y = sample, fill = z)) +
       ggplot2::geom_tile() +
       ggplot2::scale_fill_gradient(high = "red", low = "blue", name = legend_title) +
       ggplot2::theme_bw() +
       ggplot2::theme(
         axis.text.x = ggplot2::element_text(angle = 90, hjust = 1, vjust = 0.5)
-      )
+      ) +
+      ggplot2::labs(x = "")
   }
 
 
