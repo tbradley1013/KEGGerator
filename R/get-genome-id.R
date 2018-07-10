@@ -6,7 +6,7 @@
 #'
 #' @export
 get_genome_id <- function(data) {
-  if (class(data) == "phyloseq") data <- genomes_tibble(data)
+  if (any(class(data) == "phyloseq")) data <- genomes_tibble(data)
 
   if (!"tbl_df" %in% class(data)) stop("data must be either of class tbl_df or phyloseq")
   if (!"genome" %in% colnames(data)) stop("there must be a column named 'genome' in data")

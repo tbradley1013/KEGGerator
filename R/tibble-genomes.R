@@ -4,7 +4,7 @@
 #'
 #' @export
 genomes_tibble <- function(data, drop_taxa = TRUE){
-  if (class(data) == "phyloseq") data <- tax_tibble(data)
+  if (any(class(data) == "phyloseq")) data <- tax_tibble(data)
 
   if (!"tbl_df" %in% class(data)) stop("data must be either of class tbl_df or phyloseq")
 
