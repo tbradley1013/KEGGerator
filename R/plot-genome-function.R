@@ -158,7 +158,7 @@ genomic_func_heatmap <- function(data, otu_tibble = NULL, tax_tibble = NULL,
       ) %>%
       plotly::layout(
         margin = list(
-          b = if_else(num_genomes > 10, 175, 100),
+          b = dplyr::if_else(num_genomes > 10, 175, 100),
           l = 80
         ),
         font = list(
