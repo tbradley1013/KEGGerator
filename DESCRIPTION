@@ -18,5 +18,6 @@ Imports:
     tibble,
     stringr,
     ggplot2,
-    plotly
+    plotly,
+    crayon
 RoxygenNote: 6.0.1
