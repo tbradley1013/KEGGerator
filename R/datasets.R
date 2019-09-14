@@ -25,13 +25,16 @@ get_kegg_pathway <- function(){
 
   if (is.na(kegg_pathways_list)) stop("Download of KEGG pathway information failed", call. = FALSE)
 
-  kegg_pathways <- tibble::tibble(
+  pathways <- tibble::tibble(
     pathway_id = names(kegg_pathways_list),
     pathway = kegg_pathways_list
   )
 
-  return(kegg_pathways)
+  class(pathways) <- c("kegg_tbl", class(pathways))
+
+  return(pathways)
 }
+
 
 #' @rdname get_datasets
 #' @export
@@ -40,10 +43,14 @@ get_kegg_module <- function(){
 
   if (is.na(kegg_module_list)) stop("Download of KEGG module information failed", call. = FALSE)
 
-  kegg_modules <- tibble::tibble(
+  modules <- tibble::tibble(
     module_id = names(kegg_module_list),
     module = kegg_module_list
   )
+
+  class(modules) <- c("kegg_tbl", class(modules))
+
+  return(modules)
 }
 
 #' @rdname get_datasets
@@ -53,10 +60,14 @@ get_kegg_enzyme <- function(){
 
   if (is.na(kegg_enzyme_list)) stop("Download of KEGG enzyme information failed", call. = FALSE)
 
-  kegg_enzymes <- tibble::tibble(
+  enzymes <- tibble::tibble(
     enzyme_id = names(kegg_enzyme_list),
     enzyme = kegg_enzyme_list
   )
+
+  class(enzymes) <- c("kegg_tbl", class(enzymes))
+
+  return(enzymes)
 }
 
 #' @rdname get_datasets
@@ -64,10 +75,26 @@ get_kegg_enzyme <- function(){
 get_kegg_orthology <- function(){
   kegg_orthology_list <- kegg_list_safe("orthology")
 
-  if (is.na(kegg_enzyme_list)) stop("Download of KEGG orthology information failed", call. = FALSE)
+  if (is.na(kegg_orthology_list)) stop("Download of KEGG orthology information failed", call. = FALSE)
 
-  kegg_orthologies <- tibble::tibble(
+  orthologies <- tibble::tibble(
     orthology_id = names(kegg_orthology_list),
     orthology = kegg_orthology_list
   )
+
+  class(orthologies) <- c("kegg_tbl", class(orthologies))
+
+  return(orthologies)
+}
+
+is_kegg_tbl <- function(x, type){
+  cols <- paste0(type, c("_id", ""))
+
+  if (inherits(x, "kegg_tbl")){
+    if (all(cols %in% colnames(x))){
+      return(TRUE)
+    }
+  }
+
+  return(FALSE)
 }
