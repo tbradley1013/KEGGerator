@@ -34,3 +34,27 @@ get_kegg_module <- function(){
     module = kegg_module_list
   )
 }
+
+#' @rdname get_datasets
+get_kegg_enzyme <- function(){
+  kegg_enzyme_list <- kegg_list_safe("enzyme")
+
+  if (is.na(kegg_enzyme_list)) stop("Download of KEGG enzyme information failed", call. = FALSE)
+
+  kegg_enzymes <- tibble::tibble(
+    enzyme_id = names(kegg_enzyme_list),
+    enzyme = kegg_enzyme_list
+  )
+}
+
+#' @rdname get_datasets
+get_kegg_orthology <- function(){
+  kegg_orthology_list <- kegg_list_safe("orthology")
+
+  if (is.na(kegg_enzyme_list)) stop("Download of KEGG orthology information failed", call. = FALSE)
+
+  kegg_orthologies <- tibble::tibble(
+    orthology_id = names(kegg_orthology_list),
+    orthology = kegg_orthology_list
+  )
+}
