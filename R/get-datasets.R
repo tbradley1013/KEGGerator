@@ -6,10 +6,20 @@
 #===============================================================================
 
 #' Get Updated KEGG datasets
+#'
 #' @name get_datasets
+#'
+#' @details
+#' These functions will allow users to get updated datasets rather if they do
+#' not want to use the ones supplied in this package. While I will try to keep
+#' these datasets updated, it will allow for the flexibility for users to
+#' have the most updated data in KEGG
+#'
+#' @export
 NULL
 
 #' @rdname get_datasets
+#' @export
 get_kegg_pathway <- function(){
   kegg_pathways_list <- kegg_list_safe("pathway")
 
@@ -24,6 +34,7 @@ get_kegg_pathway <- function(){
 }
 
 #' @rdname get_datasets
+#' @export
 get_kegg_module <- function(){
   kegg_module_list <- kegg_list_safe("module")
 
@@ -36,6 +47,7 @@ get_kegg_module <- function(){
 }
 
 #' @rdname get_datasets
+#' @export
 get_kegg_enzyme <- function(){
   kegg_enzyme_list <- kegg_list_safe("enzyme")
 
@@ -48,6 +60,7 @@ get_kegg_enzyme <- function(){
 }
 
 #' @rdname get_datasets
+#' @export
 get_kegg_orthology <- function(){
   kegg_orthology_list <- kegg_list_safe("orthology")
 
