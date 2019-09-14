@@ -87,6 +87,9 @@ get_kegg_orthology <- function(){
   return(orthologies)
 }
 
+#' Check whether KEGGerator datasets have the correct class
+#'
+#' @export
 is_kegg_tbl <- function(x, type){
   cols <- paste0(type, c("_id", ""))
 
