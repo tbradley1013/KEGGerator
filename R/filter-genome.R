@@ -1,10 +1,22 @@
 #' Filter out genomes by pathway
 #'
 #' @param data a tibble that has genome_ids - likely the output from get_genome_id()
+#' @param pathway_name the name of the pathway that you wish to filter
+#' @param pathways a kegg_tbl dataset of available kegg pathways. This dataset
+#' is produced from the get_kegg_pathway function. If it is NULL (default) the
+#' KEGGerator::kegg_pathways dataset will be used
 #'
 #' @export
-filter_genome_by_pathway <- function(data, pathway_name){
-  pathway_ids <- kegg_pathways %>%
+filter_genome_by_pathway <- function(data, pathway_name, pathways = NULL){
+  if (is.null(pathways)){
+    pathways <- kegg_pathways
+  } else{
+    if (!is_kegg_tbl(pathways, "pathway")){
+      stop("pathways must be a kegg_tbl with the columns `pathway` and `pathway_id`", call. = FALSE)
+    }
+  }
+
+  pathway_ids <- pathways %>%
     dplyr::filter(stringr::str_detect(pathway, pathway_name)) %>%
     dplyr::mutate(pathway_id = stringr::str_replace(pathway_id, "path:map", "")) %>%
     dplyr::pull(pathway_id)
