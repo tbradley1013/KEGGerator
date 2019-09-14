@@ -16,5 +16,8 @@ Imports:
     tidyr,
     KEGGREST,
     tibble,
-    stringr
+    stringr,
+    ggplot2,
+    plotly,
+    crayon
 RoxygenNote: 6.0.1
