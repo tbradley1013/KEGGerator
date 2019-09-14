@@ -1,6 +1,7 @@
 #' extract genomes from tax table or tax tibble
 #'
 #' @param data either a phyloseq object or the output of tibble_tax
+#' @param drop_taxa logical; should the taxonomy be removed from the output
 #'
 #' @export
 genomes_tibble <- function(data, drop_taxa = TRUE){
