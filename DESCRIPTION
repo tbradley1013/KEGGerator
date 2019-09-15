@@ -21,3 +21,7 @@ Imports:
     plotly,
     crayon
 RoxygenNote: 6.0.1
+Suggests: 
+    knitr,
+    rmarkdown
+VignetteBuilder: knitr
