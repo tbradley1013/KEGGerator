@@ -2,6 +2,8 @@
 #'
 #' @param data a tibble with genomes and genome_id or the output from `get_genome_id()`
 #' @param pathway_orthologies a vector of pathway orthologies
+#' @param kegg_orthology a kegg_tbl with the columns orthology and orthology_id
+#' which can be generated with the get_kegg_orthology function.
 #'
 #' @details if `pathway_orthologies` is NULL (default) than all orthologies for each genome
 #' will be returned. If a vector of orthology_ids is provided than only the orthologies related
