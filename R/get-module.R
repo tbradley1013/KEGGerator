@@ -3,10 +3,18 @@
 #' @param data a tibble that is output from get_pathway_enzymes()
 #'
 #' @export
-get_enzyme_modules <- function(data){
+get_enzyme_modules <- function(data, kegg_module = NULL){
   if (!"tbl_df" %in% class(data)) stop("data must be of class tbl_df")
 
   if (!"enzyme_id" %in% colnames(data)) stop("data must contian a column named 'enzyme_id'")
+
+  if (is.null(kegg_module)){
+    kegg_module <- KEGGerator::kegg_modules
+  } else {
+    if (!is_kegg_tbl(kegg_module, "module")){
+      stop("kegg_module must be a kegg_tbl with columns module and module_id", call. = FALSE)
+    }
+  }
 
   output <- data %>%
     dplyr::mutate(
@@ -17,7 +25,7 @@ get_enzyme_modules <- function(data){
           output <- tibble::tibble(
             module_id = mods
           ) %>%
-            dplyr::left_join(kegg_modules, by = "module_id")
+            dplyr::left_join(kegg_module, by = "module_id")
         } else {
           output <- tibble::tibble(
             module_id = "None",
