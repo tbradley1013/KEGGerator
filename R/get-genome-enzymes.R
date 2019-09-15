@@ -3,7 +3,8 @@
 #' @param data a tibble with genomes and genome_id or the output from `get_genome_id()`
 #' @param pathway_enzymes a vector of pathway enzymes
 #' @param kegg_enzyme a kegg_tbl that has the columns enzyme and enzyme_id. This
-#' can be generated using the get_kegg_enzyme() function.
+#' can be generated using the get_kegg_enzyme() function. If NULL (default) than
+#' the KEGGerator::kegg_enzymes dataset will be used
 #'
 #' @details if `pathway_enzymes` is NULL (default) than all enzymes for each genome
 #' will be returned. If a vector of enzyme_ids is provided than only the enzymes related
