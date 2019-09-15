@@ -19,4 +19,18 @@ knitr::opts_chunk$set(
 )
 ```
 
+This goal of this vignette is to walk you through the basic functionality of the `KEGGerator` package. This package is designed for use with data gerenated using the `dada2` package, in the form of a `phyloseq` object. For this walk-through, we will use the `GlobalPatterns` dataset from the `phyloseq` package. 
 
+```{r load-libraries}
+library(phyloseq)
+library(KEGGerator)
+library(tidyverse)
+```
+
+```{r}
+patterns_file <- system.file("data", "GlobalPatterns.Rdata", package = "phyloseq")
+load(patterns_file)
+
+# Filter data for runtime effeciency - reduces dataset to ~10% of original size
+patterns <- filter_taxa(GlobalPatterns, function(x)sum(x)>1000, prune = TRUE)
+```
