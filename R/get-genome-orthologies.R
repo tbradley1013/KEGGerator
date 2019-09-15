@@ -10,9 +10,17 @@
 #' that are related with the pathway of interest.
 #'
 #' @export
-get_genome_orthologies <- function(data, pathway_orthologies = NULL){
+get_genome_orthologies <- function(data, pathway_orthologies = NULL, kegg_orthology = NULL){
   if (!"tbl_df" %in% class(data)) stop("data must be of class 'tbl_df'")
   if (!"genome_id" %in% colnames(data)) stop("data must have column named 'genome_id'")
+
+  if (is.null(kegg_orthology)){
+    kegg_orthology <- KEGGerator::kegg_orthologies
+  } else {
+    if (!is_kegg_tbl(kegg_orthology, "orthology")){
+      stop("kegg_orthology must be a kegg_tbl with columns orthology and orthology_id", call. = FALSE)
+    }
+  }
 
   output <- data %>%
     dplyr::mutate(
@@ -30,7 +38,7 @@ get_genome_orthologies <- function(data, pathway_orthologies = NULL){
       })
     ) %>%
     tidyr::unnest(orthology_id) %>%
-    dplyr::left_join(kegg_orthologies, by = "orthology_id")
+    dplyr::left_join(kegg_orthology, by = "orthology_id")
 
   return(output)
 }
