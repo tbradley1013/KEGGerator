@@ -71,4 +71,12 @@ as_keggerator <- function(x){
 
 as_keggerator.phyloseq <- function(x){
 
+  otu <- otu_tibble(x)
+  tax <- tax_tibble(x)
+  sam <- sam_tibble(x)
+  otu_ref <- otu_ref(x)
+
+  output <- keggerator(tax_tbl = tax, otu_tbl = otu, sam_tbl = sam, otu_ref = otu_ref)
+
+  return(output)
 }
