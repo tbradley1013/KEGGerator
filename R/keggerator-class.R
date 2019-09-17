@@ -8,9 +8,9 @@ keggerator <- function(tax_tbl = NULL, otu_tbl = NULL, sam_tbl = NULL,
                        otu_ref = NULL, orgs_tbl = NULL, orgs_id = NULL,
                        orgs_filt = NULL, orgs_enzymes = NULL, orgs_orthologies = NULL,
                        orgs_genes = NULL){
-  if (!null_check(tax_tbl, is_tax_tbl)) stop("argument tax_tbl must be of class tax_tbl")
-  if (!null_check(otu_tbl, is_otu_tbl)) stop("argument otu_tbl must be of class otu_tbl")
-  if (!null_check(sam_tbl, is_sam_tbl)) stop("argument sam_tbl must be of class sam_tbl")
+  if (!null_check(tax_tbl, is_tax_tbl)) stop("argument tax_tbl must be of class tax_tbl", call. = FALSE)
+  if (!null_check(otu_tbl, is_otu_tbl)) stop("argument otu_tbl must be of class otu_tbl", call. = FALSE)
+  if (!null_check(sam_tbl, is_sam_tbl)) stop("argument sam_tbl must be of class sam_tbl", call. = FALSE)
 
   output <- structure(
     list(
