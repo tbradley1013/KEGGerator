@@ -209,6 +209,32 @@ otu_ref.otu_table <- function(otu, tax){
 #' @export
 otu_ref.taxonomyTable <- otu_ref.otu_table
 
+#' @describeIn otu_ref
+#' @export
+otu_ref.tax_tbl <- function(tax){
+  id_match <- attr(tax, "id_match")
+  if (is.null(id_match) | !id_match) stop("tax_tbl provided has not been checked for otu agreement between tax table and otu table", call. = FALSE)
+
+  output <- dplyr::select(tax, otu_id, otu)
+
+  prev_class <- class(output)
+  class(output) <- c("otu_ref", prev_class[prev_class != "tax_tbl"])
+  return(output)
+}
+
+#' @describeIn otu_ref
+#' @export
+otu_ref.otu_tbl <- function(otu){
+  id_match <- attr(otu, "id_match")
+  if (is.null(id_match) | !id_match) stop("otu_tbl provided has not been checked for otu agreement between tax table and otu table", call. = FALSE)
+
+  output <- dplyr::select(otu, otu_id, otu)
+
+  prev_class <- class(output)
+  class(output) <- c("otu_ref", prev_class[prev_class != "otu_tbl"])
+  return(output)
+}
+
 # This function checks whether the otu names match for
 # both the taxonomy table and the otu table either within
 # a single phyloseq object or in separately provided taxonomyTable
