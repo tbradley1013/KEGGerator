@@ -13,4 +13,5 @@ test_that("conversion from phyloseq to keggerator components works", {
 
   # testing that the otu ids work correctly
   expect_identical(ps_otu_ref, dplyr::select(ps_otu, otu_id, otu))
+  expect_identical(ps_otu_ref, dplyr::select(ps_tax, otu_id, otu))
 })
