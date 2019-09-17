@@ -51,13 +51,18 @@ orgs_tibble.tax_tbl <- function(data, drop_taxa = TRUE, strict = FALSE, sep = "\
 
   if (drop_taxa) orgs <- dplyr::select(orgs, otu_id, genome)
 
-  otu_species_uncertainty <- orgs %>%
+  otu_species_uncert <- orgs %>%
     dplyr::group_by(otu_id) %>%
-    dplyr::summarize(n = n()) %>%
+    dplyr::summarize(n_spec = n()) %>%
     dplyr::ungroup() %>%
-    dplyr::mutate(uncert = if_else(otu_id %in% spec_undef, 1, 1/n))
+    dplyr::mutate(uncert = if_else(otu_id %in% spec_undef, 1, 1/n_spec))
 
-  output <- list(orgs_tibble = orgs, otu_uncertainty = otu_species_uncertainty)
+  class(orgs) <- c("orgs_tbl", class(orgs))
+  class(otu_species_uncert) <- c("uncert_tbl", class(otu_species_uncert))
+
+  output <- list(orgs_tibble = orgs, species_uncert = otu_species_uncert)
+
+  class(output) <- c("orgs_list", class(output))
 
   return(output)
 }
@@ -71,7 +76,7 @@ orgs_tibble.keggerator <- function(data, drop_taxa = TRUE, strict = FALSE, sep =
   orgs <- orgs_tibble.tax_tbl(tax, drop_taxa = drop_taxa, strict = strict, sep = sep)
 
   data$orgs_tbl <- orgs$orgs_tibble
-  data$otu_uncertainty <- orgs$otu_uncertainty
+  data$species_uncert <- orgs$species_uncert
 
   return(data)
 
