@@ -63,20 +63,25 @@ null_check_opt <- function(x, .f) {
 
 #' Convert an object into class keggerator
 #'
+#' @param ps a phyloseq object to be converted to a keggerator object
+#' @param ... additional arguements to be passed to \code{\link[KEGGerator]{keggerator}}
 #'
 #' @export
-as_keggerator <- function(x){
+as_keggerator <- function(ps, ...){
   UseMethod("as_keggerator")
 }
 
-as_keggerator.phyloseq <- function(x){
+#' @describeIn as_keggerator
+#' @export
+as_keggerator.phyloseq <- function(ps, ...){
+  # browser()
 
-  otu <- otu_tibble(x)
-  tax <- tax_tibble(x)
-  sam <- sam_tibble(x)
-  otu_ref <- otu_ref(x)
+  otu <- otu_tibble(ps)
+  tax <- tax_tibble(ps)
+  sam <- sam_tibble(ps)
+  otu_ref <- otu_ref(ps)
 
-  output <- keggerator(tax_tbl = tax, otu_tbl = otu, sam_tbl = sam, otu_ref = otu_ref)
+  output <- keggerator(tax_tbl = tax, otu_tbl = otu, sam_tbl = sam, otu_ref = otu_ref, ...)
 
   return(output)
 }
