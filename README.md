@@ -3,9 +3,6 @@
 
 # KEGGerator
 
-<font color='red' size='5em'><b>KEGGerator is currently unstable and
-under active development</b></font>
-
 <!-- badges: start -->
 
 ![lifecycle](https://img.shields.io/badge/lifecycle-experimental-orange.svg)
@@ -13,6 +10,12 @@ under active development</b></font>
 commit](https://img.shields.io/github/last-commit/tbradley1013/KEGGerator)
 
 <!-- badges: end -->
+
+<p style="color=red;font-size=5em;">
+
+<b>KEGGerator is currently unstable and under active development</b>
+
+</p>
 
 The goal of KEGGerator is to identify the functionality of 16S rRNA
 microbial community data.
