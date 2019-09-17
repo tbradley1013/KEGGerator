@@ -87,7 +87,7 @@ is_orgs_list <- function(x){
 }
 
 is_orgs_tbl <- function(x){
-  inherits(x, "orgs_tbl")
+  all(c(inherits(x, "orgs_tbl"), "genome" %in% colnames(x)))
 }
 
 is_uncert_tbl <- function(x){
