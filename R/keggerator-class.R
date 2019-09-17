@@ -8,9 +8,24 @@ keggerator <- function(tax_tbl = NULL, otu_tbl = NULL, sam_tbl = NULL,
                        otu_ref = NULL, orgs_tbl = NULL, orgs_id = NULL,
                        orgs_filt = NULL, orgs_enzymes = NULL, orgs_orthologies = NULL,
                        orgs_genes = NULL){
-  if (!null_check(tax_tbl, is_tax_tbl)) stop("argument tax_tbl must be of class tax_tbl", call. = FALSE)
-  if (!null_check(otu_tbl, is_otu_tbl)) stop("argument otu_tbl must be of class otu_tbl", call. = FALSE)
-  if (!null_check(sam_tbl, is_sam_tbl)) stop("argument sam_tbl must be of class sam_tbl", call. = FALSE)
+  # These first four arguments are required in order to build the keggerator object
+  if (!null_check_req(tax_tbl, is_tax_tbl)) stop("argument tax_tbl must not be null and be of class tax_tbl", call. = FALSE)
+  if (!null_check_req(otu_tbl, is_otu_tbl)) stop("argument otu_tbl must not be null and be of class otu_tbl", call. = FALSE)
+  if (!null_check_req(sam_tbl, is_sam_tbl)) stop("argument sam_tbl must not be null and be of class sam_tbl", call. = FALSE)
+  if (!null_check_req(otu_ref, is_otu_ref)) stop("argument otu_ref must not be null and be of class otu_ref", call. = FALSE)
+
+  # Checking if the id_match attribute is set for the tax_tbl and otu_tbl
+  # arguments. If it is not set, than it will be set using the id_match
+  # attribute from the otu_ref object. This is done because if the user
+  # passes otu_table and taxonomyTable objects to create the otu_tbl and
+  # tax_tbl objects, respectively, this attribute can not be set.
+  if (is.null(attr(tax_tbl, "id_match"))){
+    attr(tax_tbl, "id_match") <- attr(otu_ref, "id_match")
+  }
+
+  if (is.null(attr(otu_tbl, "id_match"))){
+    attr(otu_tbl, "id_match") <- attr(otu_ref, "id_match")
+  }
 
   output <- structure(
     list(
@@ -31,8 +46,14 @@ keggerator <- function(tax_tbl = NULL, otu_tbl = NULL, sam_tbl = NULL,
   return(output)
 }
 
-null_check <- function(x, .f){
-  if (is.null(x)) return(TRUE)
+null_check_req <- function(x, .f){
+  if (is.null(x)) return(FALSE)
+
+  .f(x)
+}
+
+null_check_opt <- function(x, .f) {
+  if (is.null(x)) return(FALSE)
 
   .f(x)
 }
