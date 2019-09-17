@@ -28,7 +28,7 @@ otu_tibble.phyloseq <- function(data) {
     tibble::as_tibble() %>%
     dplyr::mutate(otu_id = dplyr::row_number())
 
-  class(output) <- c("tax_tbl", "keggerator", class(output))
+  class(output) <- c("tax_tbl", class(output))
   attr(output, "id_match") <- id_match
 
   return(output)
@@ -55,7 +55,7 @@ tax_tibble.phyloseq <- function(data){
     tibble::as_tibble() %>%
     dplyr::mutate(otu_id = dplyr::row_number())
 
-  class(output) <- c("otu_tbl", "keggerator", class(output))
+  class(output) <- c("otu_tbl", class(output))
   attr(output, "id_match") <- id_match
 
   return(output)
@@ -81,7 +81,7 @@ sam_tibble.phyloseq <- function(data){
     tibble::rownames_to_column("sample") %>%
     tibble::as_tibble()
 
-  class(output) <- c("sam_tbl", "keggerator", class(output))
+  class(output) <- c("sam_tbl", class(output))
 
   return(output)
 }
