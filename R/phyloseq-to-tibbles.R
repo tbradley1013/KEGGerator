@@ -122,7 +122,7 @@ sam_tibble <- function(data){
 
 #' @export
 sam_tibble.phyloseq <- function(data){
-  sam_data <- phyloseq::sam_data(data)
+  sam_data <- phyloseq::sample_data(data)
 
   output <- sam_data %>%
     as.data.frame() %>%
