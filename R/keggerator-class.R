@@ -4,6 +4,9 @@
 #' required components for analysis with
 #' KEGGerator
 #'
+#' @return an object of class keggerator
+#'
+#' @export
 keggerator <- function(tax_tbl = NULL, otu_tbl = NULL, sam_tbl = NULL,
                        otu_ref = NULL, orgs_tbl = NULL, orgs_id = NULL,
                        orgs_filt = NULL, orgs_enzymes = NULL, orgs_orthologies = NULL,
@@ -58,6 +61,10 @@ null_check_opt <- function(x, .f) {
   .f(x)
 }
 
+#' Convert an object into class keggerator
+#'
+#'
+#' @export
 as_keggerator <- function(x){
   UseMethod("as_keggerator")
 }
