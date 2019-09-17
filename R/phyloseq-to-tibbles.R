@@ -15,17 +15,21 @@ otu_tibble <- function(data){
 
 #' @export
 otu_tibble.phyloseq <- function(data) {
-  # if (class(data) != "phyloseq") stop("data must be a phyloseq object")
 
   otu <- phyloseq::otu_table(data)
   if (!phyloseq::taxa_are_rows(otu)) {
     otu <- t(otu)
   }
+  id_match <- check_otu_id(data)
 
   output <- otu %>%
     as.data.frame() %>%
     tibble::rownames_to_column("otu") %>%
-    tibble::as_tibble()
+    tibble::as_tibble() %>%
+    dplyr::mutate(otu_id = dplyr::row_number())
+
+  class(output) <- c("tax_tbl", "keggerator", class(output))
+  attr(output, "id_match") <- id_match
 
   return(output)
 }
@@ -41,14 +45,18 @@ tax_tibble <- function(data){
 
 #' @export
 tax_tibble.phyloseq <- function(data){
-  if (class(data) != "phyloseq") stop("data must be a phyloseq object")
 
   tax <- phyloseq::tax_table(data)
+  id_match <- check_otu_id(data)
 
   output <- tax %>%
     as.data.frame() %>%
     tibble::rownames_to_column("otu") %>%
-    tibble::as_tibble()
+    tibble::as_tibble() %>%
+    dplyr::mutate(otu_id = dplyr::row_number())
+
+  class(output) <- c("otu_tbl", "keggerator", class(output))
+  attr(output, "id_match") <- id_match
 
   return(output)
 }
@@ -73,5 +81,18 @@ sam_tibble.phyloseq <- function(data){
     tibble::rownames_to_column("sample") %>%
     tibble::as_tibble()
 
+  class(output) <- c("otu_tbl", "keggerator", class(output))
+
   return(output)
+}
+
+
+check_otu_id <- function(data){
+  tax <- phyloseq::tax_table(data)
+  otu <- phyloseq::otu_table(data)
+  if (!phyloseq::taxa_are_rows(otu)) {
+    otu <- t(otu)
+  }
+
+  identical(rownames(tax), rownames(otu))
 }
