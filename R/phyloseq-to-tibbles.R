@@ -132,7 +132,8 @@ sam_tibble.phyloseq <- function(data){
   output <- sam_data %>%
     as.data.frame() %>%
     tibble::rownames_to_column("sample") %>%
-    tibble::as_tibble()
+    tibble::as_tibble() %>%
+    dplyr::select(sample, dplyr::everything())
 
   class(output) <- c("sam_tbl", class(output))
 
@@ -146,7 +147,8 @@ sam_tibble.sample_data <- function(data){
   output <- sam_data %>%
     as.data.frame() %>%
     tibble::rownames_to_column("sample") %>%
-    tibble::as_tibble()
+    tibble::as_tibble()  %>%
+    dplyr::select(sample, dplyr::everything())
 
   class(output) <- c("sam_tbl", class(output))
 
