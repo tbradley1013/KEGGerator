@@ -82,4 +82,14 @@ orgs_tibble.keggerator <- function(data, drop_taxa = TRUE, strict = FALSE, sep =
 
 }
 
+is_orgs_list <- function(x){
+  inherits(x, "orgs_list")
+}
 
+is_orgs_tbl <- function(x){
+  inherits(x, "orgs_tbl")
+}
+
+is_uncert_tbl <- function(x){
+  inherits(x, "uncert_tbl")
+}
