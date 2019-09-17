@@ -1,9 +1,44 @@
-#' retrieve KEGG genome id for all genomes
+#' retrieve KEGG genome id for all organims
 #'
 #' @param data dataset of genome names to get id for
 #'
-#' @details This took ~4.4 minutes to run for 400 genomes
+#' @details This took ~4.4 minutes to run for 400 organisms
 #'
+#' @export
+get_org_ids <- function(data, verbose){
+  UseMethod("get_genome_id")
+}
+
+get_org_id.orgs_tbl <- function(data, verbose = TRUE){
+  if (!is_orgs_tbl) stop("data must have column named genome", call. = FALSE)
+
+  output <- data %>%
+    dplyr::mutate(genome_query = purrr::map(genome, ~{
+      query <- kegg_find_safe("genome", .x)
+
+      if (verbose){
+        cat(
+          "Matching Genomes for ", crayon::red(.x), ": ",
+          crayon::blue(length(query)), "\n", sep = ""
+        )
+      }
+
+      return(query)
+    })) %>%
+    dplyr::filter(purrr::map(genome_query, length) > 0,
+                  !is.na(genome_query)) %>%
+    dplyr::mutate(genome_id = purrr::map(genome_query, ~names(.x))) %>%
+    tidyr::unnest(genome_query, genome_id) %>%
+    dplyr::distinct()
+
+
+
+
+
+  return(output)
+
+}
+
 #' @export
 get_genome_id <- function(data, verbose = FALSE) {
   if (any(class(data) == "phyloseq")) data <- genomes_tibble(data)

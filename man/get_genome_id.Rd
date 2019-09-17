@@ -4,7 +4,7 @@
 \alias{get_genome_id}
 \title{retrieve KEGG genome id for all genomes}
 \usage{
-get_genome_id(data)
+get_genome_id(data, verbose = FALSE)
 }
 \arguments{
 \item{data}{dataset of genome names to get id for}

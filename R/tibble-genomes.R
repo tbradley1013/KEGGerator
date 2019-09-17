@@ -1,43 +1,95 @@
-#' extract genomes from tax table or tax tibble
+#' extract organisms from tax table or tax tibble
 #'
 #' @param data either a phyloseq object or the output of tibble_tax
 #' @param drop_taxa logical; should the taxonomy be removed from the output
 #' @param strict logical; if set to TRUE, it will not keep any taxa that have
 #' not been classified to the species level.
+#' @param sep what is used to separate multiple species in the species column.
+#' Must be valid regex targeting the seperator. Default is "\\/" to match the
+#' default separator used during taxonomic classification by \code{\link[dada2]{addSpecies}}
 #'
 #' @export
-genomes_tibble <- function(data, drop_taxa = TRUE, strict = FALSE){
-  if (any(class(data) == "phyloseq")) data <- tax_tibble(data)
+orgs_tibble <- function(data, drop_taxa, strict, sep){
+  UseMethod("orgs_tibble")
+}
 
-  if (!"tbl_df" %in% class(data)) stop("data must be either of class tbl_df or phyloseq")
+#' @describeIn orgs_tibble
+#' @export
+orgs_tibble.tax_tbl <- function(data, drop_taxa = TRUE, strict = FALSE, sep = "\\/"){
+  if (!ids_match(data)){
+    warning("tax_tbl provided has not had otu_ids verified against otu_tbl and may cause issues later if they do not match.",
+            "Run KEGGerator:::check_otu_id() on your phyloseq data to ensure OTUs match.", call. = FALSE)
+  }
 
+  # removing all otus that are not defined to at least the genus level
   taxa <- data %>%
     dplyr::mutate_if(is.factor, as.character) %>%
     dplyr::filter(!is.na(Genus)) %>%
     dplyr::mutate(Species = dplyr::if_else(is.na(Species), "", Species))
+
+  # getting all otu_ids that are not defined at the species level
+  spec_undef <- taxa$otu_id[taxa$Species == ""]
 
   # removing the taxa that do not have any species assigned
   if (strict){
     taxa <- dplyr::filter(taxa, Species != "")
   }
 
-
-
+  # finding the max uncertainty in any of the species columns
   max_uncertainty <- taxa$Species %>%
-    stringr::str_count("\\/") %>%
+    stringr::str_count(sep) %>%
     max()
 
   taxa_cols <- purrr::map_chr(1:(max_uncertainty + 1), ~paste0("genome", .x))
 
-  output <- taxa %>%
-    {suppressWarnings(tidyr::separate(., Species, into = taxa_cols))} %>%
+  orgs <- taxa %>%
+    {suppressWarnings(tidyr::separate(., Species, into = taxa_cols, sep = sep))} %>%
     tidyr::gather(key = key, value = Species, !!dplyr::quo(taxa_cols)) %>%
     dplyr::filter(!is.na(Species)) %>%
     tidyr::unite("genome", Genus, Species, sep = " ") %>%
     dplyr::mutate(genome = stringr::str_trim(genome))
 
-  if (drop_taxa) output <- dplyr::select(output, genome)
+  if (drop_taxa) orgs <- dplyr::select(orgs, otu_id, genome)
+
+  otu_species_uncert <- orgs %>%
+    dplyr::group_by(otu_id) %>%
+    dplyr::summarize(n_spec = n()) %>%
+    dplyr::ungroup() %>%
+    dplyr::mutate(uncert = if_else(otu_id %in% spec_undef, 1, 1/n_spec))
+
+  class(orgs) <- c("orgs_tbl", class(orgs))
+  class(otu_species_uncert) <- c("uncert_tbl", class(otu_species_uncert))
+
+  output <- list(orgs_tibble = orgs, species_uncert = otu_species_uncert)
+
+  class(output) <- c("orgs_list", class(output))
 
   return(output)
 }
 
+#' @describeIn orgs_tibble
+#' @export
+orgs_tibble.keggerator <- function(data, drop_taxa = TRUE, strict = FALSE, sep = "\\/"){
+
+  tax <- data$tax_tbl
+
+  orgs <- orgs_tibble.tax_tbl(tax, drop_taxa = drop_taxa, strict = strict, sep = sep)
+
+  data$orgs_tbl <- orgs$orgs_tibble
+  data$species_uncert <- orgs$species_uncert
+
+  return(data)
+
+}
+
+is_orgs_list <- function(x){
+  inherits(x, "orgs_list")
+}
+
+is_orgs_tbl <- function(x){
+  all(c(inherits(x, "orgs_tbl"), "genome" %in% colnames(x)))
+}
+
+is_uncert_tbl <- function(x){
+  inherits(x, "uncert_tbl")
+}

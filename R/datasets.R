@@ -14,8 +14,6 @@
 #' not want to use the ones supplied in this package. While I will try to keep
 #' these datasets updated, it will allow for the flexibility for users to
 #' have the most updated data in KEGG
-#'
-#' @export
 NULL
 
 #' @rdname get_datasets

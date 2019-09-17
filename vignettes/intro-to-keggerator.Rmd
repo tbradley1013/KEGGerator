@@ -32,7 +32,14 @@ patterns_file <- system.file("data", "GlobalPatterns.Rdata", package = "phyloseq
 load(patterns_file)
 
 # Filter data for runtime effeciency - reduces dataset to ~10% of original size
-patterns <- filter_taxa(GlobalPatterns, function(x)sum(x)>1000, prune = TRUE)
+patterns <- filter_taxa(GlobalPatterns, function(x)sum(x)>10000, prune = TRUE)
+```
+
+
+
+```{r}
+patterns_tax <- tax_tibble(patterns)
+patterns_genomes <- genomes_tibble(patterns)
 ```
 
 First, 

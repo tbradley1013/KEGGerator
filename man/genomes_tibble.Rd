@@ -4,10 +4,15 @@
 \alias{genomes_tibble}
 \title{extract genomes from tax table or tax tibble}
 \usage{
-genomes_tibble(data, drop_taxa = TRUE)
+genomes_tibble(data, drop_taxa = TRUE, strict = FALSE)
 }
 \arguments{
 \item{data}{either a phyloseq object or the output of tibble_tax}
+
+\item{drop_taxa}{logical; should the taxonomy be removed from the output}
+
+\item{strict}{logical; if set to TRUE, it will not keep any taxa that have
+not been classified to the species level.}
 }
 \description{
 extract genomes from tax table or tax tibble

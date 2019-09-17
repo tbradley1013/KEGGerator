@@ -4,12 +4,16 @@
 \alias{get_genome_enzymes}
 \title{Query all enzymes related to each genome in the dataset}
 \usage{
-get_genome_enzymes(data, pathway_enzymes = NULL)
+get_genome_enzymes(data, pathway_enzymes = NULL, kegg_enzyme = NULL)
 }
 \arguments{
 \item{data}{a tibble with genomes and genome_id or the output from `get_genome_id()`}
 
 \item{pathway_enzymes}{a vector of pathway enzymes}
+
+\item{kegg_enzyme}{a kegg_tbl that has the columns enzyme and enzyme_id. This
+can be generated using the get_kegg_enzyme() function. If NULL (default) than
+the KEGGerator::kegg_enzymes dataset will be used}
 }
 \description{
 Query all enzymes related to each genome in the dataset

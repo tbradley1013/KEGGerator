@@ -4,12 +4,17 @@
 \alias{get_genome_orthologies}
 \title{Query all orthologies related to each genome in the dataset}
 \usage{
-get_genome_orthologies(data, pathway_orthologies = NULL)
+get_genome_orthologies(data, pathway_orthologies = NULL,
+  kegg_orthology = NULL)
 }
 \arguments{
 \item{data}{a tibble with genomes and genome_id or the output from `get_genome_id()`}
 
 \item{pathway_orthologies}{a vector of pathway orthologies}
+
+\item{kegg_orthology}{a kegg_tbl with the columns orthology and orthology_id
+which can be generated with the get_kegg_orthology function. If NULL (default)
+the KEGGerator::kegg_orthologies dataset will be used}
 }
 \description{
 Query all orthologies related to each genome in the dataset

@@ -4,10 +4,12 @@
 \alias{otu_tibble}
 \title{Convert OTU table to tibble}
 \usage{
-otu_tibble(data)
+otu_tibble(data, quiet)
 }
 \arguments{
 \item{data}{a phyloseq object}
+
+\item{quiet}{whether to pass warnings about otu matching or not}
 }
 \description{
 Convert OTU table to tibble

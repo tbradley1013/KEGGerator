@@ -20,8 +20,9 @@ Imports:
     ggplot2,
     plotly,
     crayon
-RoxygenNote: 6.0.1
+RoxygenNote: 6.1.1
 Suggests: 
     knitr,
-    rmarkdown
+    rmarkdown,
+    testthat (>= 2.1.0)
 VignetteBuilder: knitr
