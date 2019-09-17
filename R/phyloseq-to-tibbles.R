@@ -87,13 +87,32 @@ sam_tibble.phyloseq <- function(data){
 }
 
 
+#' Create a otu reference table
+#'
+#' @param data an object to convert to otu_ref
+#'
+#' @export
 otu_ref <- function(data){
   UseMethod("otu_ref")
 }
 
 
+#' @export
 otu_ref.phyloseq <- function(data){
-  if (!check_otu_id(data)) stop("The OTU names do not match between the tax_table and otu_table in phyloseq object provided", call. = FALSE)
+  ids_match <- check_otu_id(data)
+  if (!ids_match) stop("The OTU names do not match between the tax_table and otu_table in phyloseq object provided", call. = FALSE)
+
+  otus <- rownames(tax_table(data))
+
+  output <- tibble::tibble(
+    otu_id = seq_along(otus),
+    otu = otus
+  )
+
+  class(output) <- c("otu_ref", class(output))
+  attr(output, "id_match") <- ids_match
+
+  return(output)
 }
 
 
@@ -128,3 +147,6 @@ is_sam_tbl <- function(x){
   inherits(x, "sam_tbl")
 }
 
+is_otu_ref <- function(x){
+  inherits(x, "otu_ref")
+}
