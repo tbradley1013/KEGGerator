@@ -8,7 +8,7 @@
 #'
 #' @export
 keggerator <- function(tax_tbl = NULL, otu_tbl = NULL, sam_tbl = NULL,
-                       otu_ref = NULL, orgs_tbl = NULL, otu_uncertainty = NULL, orgs_id = NULL,
+                       otu_ref = NULL, orgs_tbl = NULL, species_uncert = NULL, orgs_id = NULL,
                        orgs_filt = NULL, orgs_enzymes = NULL, orgs_orthologies = NULL,
                        orgs_genes = NULL){
   # These first four arguments are required in order to build the keggerator object
@@ -37,7 +37,7 @@ keggerator <- function(tax_tbl = NULL, otu_tbl = NULL, sam_tbl = NULL,
       "sam_tbl" = sam_tbl,
       "otu_ref" = otu_ref,
       "orgs_tbl" = orgs_tbl,
-      "otu_uncertainty" = otu_uncertainty,
+      "species_uncert" = species_uncert,
       "orgs_id" = orgs_id,
       "orgs_filt" = orgs_filt,
       "orgs_enzymes" = orgs_enzymes,
