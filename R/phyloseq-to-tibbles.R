@@ -154,7 +154,7 @@ sam_tibble.sample_data <- function(data){
 #' @param data an object to convert to otu_ref
 #'
 #' @export
-otu_ref <- function(data){
+otu_ref <- function(data, otu, tax){
   UseMethod("otu_ref")
 }
 
@@ -177,8 +177,36 @@ otu_ref.phyloseq <- function(data){
   return(output)
 }
 
+#' @export
+otu_ref.otu_table <- function(otu, tax){
+  ids_match <- check_otu_id(otu, tax)
+  if (!ids_match) stop("The OTU names do not match between the tax_table and otu_table in the otu_table and taxonomyTable objects provided", call. = FALSE)
 
-check_otu_id <- function(data){
+  otus <- rownames(tax)
+
+  output <- tibble::tibble(
+    otu_id = seq_along(otus),
+    otu = otus
+  )
+
+  class(output) <- c("otu_ref", class(output))
+  attr(output, "id_match") <- ids_match
+
+  return(output)
+}
+
+#' @export
+otu_ref.taxonomyTable <- otu_ref.otu_table
+
+# This function checks whether the otu names match for
+# both the taxonomy table and the otu table either within
+# a single phyloseq object or in separately provided taxonomyTable
+# and otu_table objects
+check_otu_id <- function(data, otu, tax){
+  UseMethod("check_otu_id")
+}
+
+check_otu_id.phyloseq <- function(data){
   tax <- phyloseq::tax_table(data)
   otu <- phyloseq::otu_table(data)
   if (!phyloseq::taxa_are_rows(otu)) {
@@ -187,6 +215,20 @@ check_otu_id <- function(data){
 
   identical(rownames(tax), rownames(otu))
 }
+
+
+check_otu_id.otu_table <- function(otu, tax){
+  if (!inherits(otu, "otu_table")) stop("otu must be of class otu_table")
+  if (!inherits(tax, "taxonomyTable")) stop("tax must be of class tax_table")
+  if (!phyloseq::taxa_are_rows(otu)){
+    otu <- t(otu)
+  }
+
+  identical(rownames(tax), rownames(otu))
+}
+
+check_otu_id.taxonomyTable <- check_otu_id.otu_table
+
 
 ids_match <- function(x){
   attr(x, "id_match")
