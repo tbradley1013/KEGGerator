@@ -14,6 +14,7 @@ otu_tibble <- function(data, quiet){
 }
 
 
+#' @describeIn otu_tibble
 #' @export
 otu_tibble.phyloseq <- function(data) {
 
@@ -30,12 +31,13 @@ otu_tibble.phyloseq <- function(data) {
     dplyr::mutate(otu_id = dplyr::row_number()) %>%
     dplyr::select(otu_id, otu, dplyr::everything())
 
-  class(output) <- c("tax_tbl", class(output))
+  class(output) <- c("otu_tbl", class(output))
   attr(output, "id_match") <- id_match
 
   return(output)
 }
 
+#' @describeIn otu_tibble
 #' @export
 otu_tibble.otu_table <- function(data, quiet = FALSE){
   otu <- data
@@ -54,7 +56,7 @@ otu_tibble.otu_table <- function(data, quiet = FALSE){
     dplyr::mutate(otu_id = dplyr::row_number()) %>%
     dplyr::select(otu_id, otu, dplyr::everything())
 
-  class(output) <- c("tax_tbl", class(output))
+  class(output) <- c("otu_tbl", class(output))
   attr(output, "id_match") <- NULL
 
   return(output)
@@ -70,6 +72,7 @@ tax_tibble <- function(data, quiet){
 }
 
 
+#' @describeIn tax_tibble
 #' @export
 tax_tibble.phyloseq <- function(data){
 
@@ -83,12 +86,13 @@ tax_tibble.phyloseq <- function(data){
     dplyr::mutate(otu_id = dplyr::row_number()) %>%
     dplyr::select(otu_id, otu, dplyr::everything())
 
-  class(output) <- c("otu_tbl", class(output))
+  class(output) <- c("tax_tbl", class(output))
   attr(output, "id_match") <- id_match
 
   return(output)
 }
 
+#' @describeIn tax_tibble
 #' @export
 tax_tibble.taxonomyTable <- function(data, quiet = FALSE){
   tax <- data
@@ -103,7 +107,7 @@ tax_tibble.taxonomyTable <- function(data, quiet = FALSE){
     dplyr::mutate(otu_id = dplyr::row_number()) %>%
     dplyr::select(otu_id, otu, dplyr::everything())
 
-  class(output) <- c("otu_tbl", class(output))
+  class(output) <- c("tax_tbl", class(output))
   attr(output, "id_match") <- NULL
 
   return(output)
@@ -120,6 +124,7 @@ sam_tibble <- function(data){
 }
 
 
+#' @describeIn sam_tibble
 #' @export
 sam_tibble.phyloseq <- function(data){
   sam_data <- phyloseq::sample_data(data)
@@ -134,6 +139,7 @@ sam_tibble.phyloseq <- function(data){
   return(output)
 }
 
+#' @describeIn sam_tibble
 #' @export
 sam_tibble.sample_data <- function(data){
 
@@ -159,6 +165,7 @@ otu_ref <- function(data, otu, tax){
 }
 
 
+#' @describeIn otu_ref
 #' @export
 otu_ref.phyloseq <- function(data){
   ids_match <- check_otu_id(data)
@@ -177,6 +184,7 @@ otu_ref.phyloseq <- function(data){
   return(output)
 }
 
+#' @describeIn otu_ref
 #' @export
 otu_ref.otu_table <- function(otu, tax){
   ids_match <- check_otu_id(otu, tax)
@@ -195,6 +203,7 @@ otu_ref.otu_table <- function(otu, tax){
   return(output)
 }
 
+#' @describeIn otu_ref
 #' @export
 otu_ref.taxonomyTable <- otu_ref.otu_table
 
