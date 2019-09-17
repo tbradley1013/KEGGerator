@@ -4,10 +4,16 @@
 \alias{filter_genome_by_pathway}
 \title{Filter out genomes by pathway}
 \usage{
-filter_genome_by_pathway(data, pathway_name)
+filter_genome_by_pathway(data, pathway_name, pathways = NULL)
 }
 \arguments{
 \item{data}{a tibble that has genome_ids - likely the output from get_genome_id()}
+
+\item{pathway_name}{the name of the pathway that you wish to filter}
+
+\item{pathways}{a kegg_tbl dataset of available kegg pathways. This dataset
+is produced from the get_kegg_pathway function. If it is NULL (default) the
+KEGGerator::kegg_pathways dataset will be used}
 }
 \description{
 Filter out genomes by pathway

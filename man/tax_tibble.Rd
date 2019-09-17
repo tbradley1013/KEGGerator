@@ -4,10 +4,12 @@
 \alias{tax_tibble}
 \title{Convert tax table to tibble}
 \usage{
-tax_tibble(data)
+tax_tibble(data, quiet)
 }
 \arguments{
 \item{data}{a phyloseq object}
+
+\item{quiet}{whether to pass warnings about otu matching or not}
 }
 \description{
 Convert tax table to tibble
