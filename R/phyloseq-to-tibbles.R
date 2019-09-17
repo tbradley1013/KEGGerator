@@ -26,7 +26,8 @@ otu_tibble.phyloseq <- function(data) {
     as.data.frame() %>%
     tibble::rownames_to_column("otu") %>%
     tibble::as_tibble() %>%
-    dplyr::mutate(otu_id = dplyr::row_number())
+    dplyr::mutate(otu_id = dplyr::row_number()) %>%
+    dplyr::select(otu_id, otu, dplyr::everything())
 
   class(output) <- c("tax_tbl", class(output))
   attr(output, "id_match") <- id_match
@@ -53,7 +54,8 @@ tax_tibble.phyloseq <- function(data){
     as.data.frame() %>%
     tibble::rownames_to_column("otu") %>%
     tibble::as_tibble() %>%
-    dplyr::mutate(otu_id = dplyr::row_number())
+    dplyr::mutate(otu_id = dplyr::row_number()) %>%
+    dplyr::select(otu_id, otu, dplyr::everything())
 
   class(output) <- c("otu_tbl", class(output))
   attr(output, "id_match") <- id_match
