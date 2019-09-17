@@ -7,8 +7,9 @@
 #' Convert OTU table to tibble
 #'
 #' @param data a phyloseq object
+#' @param quiet whether to pass warnings about otu matching or not
 #' @export
-otu_tibble <- function(data){
+otu_tibble <- function(data, quiet){
   UseMethod("otu_tibble")
 }
 
@@ -35,11 +36,36 @@ otu_tibble.phyloseq <- function(data) {
   return(output)
 }
 
+#' @export
+otu_tibble.otu_table <- function(data, quiet = FALSE){
+  otu <- data
+
+  if (!quiet) warning("Passing an otu_table directly to otu_tibble does not allow for verification that OTU names and order match between otu_table and tax_table", call. = FALSE)
+
+  if (!phyloseq::taxa_are_rows(otu)) {
+    otu <- t(otu)
+  }
+
+
+  output <- otu %>%
+    as.data.frame() %>%
+    tibble::rownames_to_column("otu") %>%
+    tibble::as_tibble() %>%
+    dplyr::mutate(otu_id = dplyr::row_number()) %>%
+    dplyr::select(otu_id, otu, dplyr::everything())
+
+  class(output) <- c("tax_tbl", class(output))
+  attr(output, "id_match") <- NULL
+
+  return(output)
+}
+
 #' Convert tax table to tibble
 #'
 #' @param data a phyloseq object
+#' @param quiet whether to pass warnings about otu matching or not
 #' @export
-tax_tibble <- function(data){
+tax_tibble <- function(data, quiet){
   UseMethod("tax_tibble")
 }
 
@@ -59,6 +85,26 @@ tax_tibble.phyloseq <- function(data){
 
   class(output) <- c("otu_tbl", class(output))
   attr(output, "id_match") <- id_match
+
+  return(output)
+}
+
+#' @export
+tax_tibble.taxonomyTable <- function(data, quiet = FALSE){
+  tax <- data
+
+  if (!quiet) warning("Passing an otu_table directly to otu_tibble does not allow for verification that OTU names and order match between otu_table and tax_table", call. = FALSE)
+
+
+  output <- tax %>%
+    as.data.frame() %>%
+    tibble::rownames_to_column("otu") %>%
+    tibble::as_tibble() %>%
+    dplyr::mutate(otu_id = dplyr::row_number()) %>%
+    dplyr::select(otu_id, otu, dplyr::everything())
+
+  class(output) <- c("otu_tbl", class(output))
+  attr(output, "id_match") <- NULL
 
   return(output)
 }
@@ -86,6 +132,20 @@ sam_tibble.phyloseq <- function(data){
   class(output) <- c("sam_tbl", class(output))
 
   return(output)
+}
+
+#' @export
+sam_tibble.sample_data <- function(data){
+
+  output <- sam_data %>%
+    as.data.frame() %>%
+    tibble::rownames_to_column("sample") %>%
+    tibble::as_tibble()
+
+  class(output) <- c("sam_tbl", class(output))
+
+  return(output)
+
 }
 
 
