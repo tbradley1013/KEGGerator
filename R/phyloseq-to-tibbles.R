@@ -87,6 +87,16 @@ sam_tibble.phyloseq <- function(data){
 }
 
 
+otu_ref <- function(data){
+  UseMethod("otu_ref")
+}
+
+
+otu_ref.phyloseq <- function(data){
+  if (!check_otu_id(data)) stop("The OTU names do not match between the tax_table and otu_table in phyloseq object provided", call. = FALSE)
+}
+
+
 check_otu_id <- function(data){
   tax <- phyloseq::tax_table(data)
   otu <- phyloseq::otu_table(data)
