@@ -81,7 +81,7 @@ sam_tibble.phyloseq <- function(data){
     tibble::rownames_to_column("sample") %>%
     tibble::as_tibble()
 
-  class(output) <- c("otu_tbl", "keggerator", class(output))
+  class(output) <- c("sam_tbl", "keggerator", class(output))
 
   return(output)
 }
@@ -96,3 +96,25 @@ check_otu_id <- function(data){
 
   identical(rownames(tax), rownames(otu))
 }
+
+ids_match <- function(x){
+  attr(x, "id_match")
+}
+
+
+is_keggerator <- function(x){
+  inherits(x, "keggerator")
+}
+
+is_otu_tbl <- function(x){
+  inherits(x, "otu_tbl")
+}
+
+is_tax_tbl <- function(x){
+  inherits(x, "tax_tbl")
+}
+
+is_sam_tbl <- function(x){
+  inherits(x, "sam_tbl")
+}
+
