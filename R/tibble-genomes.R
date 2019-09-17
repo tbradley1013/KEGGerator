@@ -6,6 +6,13 @@
 #' not been classified to the species level.
 #'
 #' @export
+genomes_tibble <- function(data, drop_taxa, strict = FALSE){
+  UseMethod("genomes_tibble")
+}
+
+
+
+#' @export
 genomes_tibble <- function(data, drop_taxa = TRUE, strict = FALSE){
   if (any(class(data) == "phyloseq")) data <- tax_tibble(data)
 
