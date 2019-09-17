@@ -36,7 +36,7 @@ genomes_tibble <- function(data, drop_taxa = TRUE, strict = FALSE){
     tidyr::unite("genome", Genus, Species, sep = " ") %>%
     dplyr::mutate(genome = stringr::str_trim(genome))
 
-  if (drop_taxa) output <- dplyr::select(output, genome)
+  if (drop_taxa) output <- dplyr::select(output, otu, genome)
 
   return(output)
 }
