@@ -34,3 +34,5 @@ load(patterns_file)
 # Filter data for runtime effeciency - reduces dataset to ~10% of original size
 patterns <- filter_taxa(GlobalPatterns, function(x)sum(x)>1000, prune = TRUE)
 ```
+
+First, 
