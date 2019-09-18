@@ -6,10 +6,10 @@
 #'
 #' @export
 get_org_ids <- function(data, verbose){
-  UseMethod("get_genome_id")
+  UseMethod("get_org_ids")
 }
 
-get_org_id.orgs_tbl <- function(data, verbose = TRUE){
+get_org_ids.orgs_tbl <- function(data, verbose = TRUE){
   if (!is_orgs_tbl) stop("data must have column named genome", call. = FALSE)
 
   output <- data %>%
