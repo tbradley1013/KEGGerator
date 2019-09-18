@@ -74,7 +74,18 @@ get_org_ids.keggerator <- function(data, verbose = TRUE){
 }
 
 
-get_org_ids.orgs_list <- function()
+get_org_ids.orgs_list <- function(data, verbose){
+
+  orgs <- data$orgs_tbl
+
+  ids <- get_org_ids.orgs_tbl(orgs, varbose = verbose)
+
+  data$orgs_id <- ids$orgs_id
+  data$kegg_uncert <- ids$kegg_uncert
+
+  return(data)
+
+}
 
 #' @export
 get_genome_id <- function(data, verbose = FALSE) {
