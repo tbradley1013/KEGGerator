@@ -45,7 +45,16 @@ uncertainty_internal <- function(spec_uncert, kegg_uncert){
 
   output <- spec_uncert %>%
     dplyr::left_join(kegg_uncert_otu, by = "otu_id") %>%
-    dplyr::mutate(total_uncert = dplyr::if_else(total_kegg_hits == 0, 1, 1-(1/max(total_kegg_hits, n_spec)))) %>%
+    dplyr::mutate(
+      total_kegg_hits = ifelse(is.na(total_kegg_hits), 0, total_kegg_hits),
+      total_uncert = purrr::map2_dbl(total_kegg_hits, n_spec, ~{
+        if (.x == 0) return(1)
+
+        max_opts <- max(.x, .y)
+
+        out <- 1-(1/max_opts)
+      })
+    ) %>%
     dplyr::select(otu_id, n_spec, total_kegg_hits, total_uncert)
 
   return(output)
