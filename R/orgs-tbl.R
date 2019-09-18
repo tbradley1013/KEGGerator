@@ -69,7 +69,10 @@ orgs_tibble.tax_tbl <- function(data, drop_taxa = TRUE, strict = FALSE, sep = "\
     dplyr::group_by(otu_id) %>%
     dplyr::summarize(n_spec = n()) %>%
     dplyr::ungroup() %>%
-    dplyr::mutate(uncert = dplyr::if_else(otu_id %in% spec_undef, 1, 1-(1/n_spec)))
+    dplyr::mutate(
+      n_spec = dplyr::if_else(otu_id %in% spec_undef, 0L, n_spec),
+      uncert = dplyr::if_else(otu_id %in% spec_undef, 1, 1-(1/n_spec))
+    )
 
   class(orgs) <- c("orgs_tbl", class(orgs))
   class(otu_species_uncert) <- c("uncert_tbl", class(otu_species_uncert))
