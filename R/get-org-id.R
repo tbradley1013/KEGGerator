@@ -69,6 +69,11 @@ get_org_ids.keggerator <- function(data, verbose = TRUE){
   data$orgs_id <- ids$orgs_id
   data$kegg_uncert <- ids$kegg_uncert
 
+  # calculating the total uncertainty
+  if (!is.null(data$species_uncert) & !is.null(data$kegg_uncert)){
+    data <- keggerator_uncertainty(data)
+  }
+
   return(data)
 
 }
@@ -83,6 +88,11 @@ get_org_ids.orgs_list <- function(data, verbose){
 
   data$orgs_id <- ids$orgs_id
   data$kegg_uncert <- ids$kegg_uncert
+
+  # calculating the total uncertainty
+  if (!is.null(data$species_uncert) & !is.null(data$kegg_uncert)){
+    data <- keggerator_uncertainty(data)
+  }
 
   return(data)
 
