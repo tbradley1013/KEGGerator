@@ -33,7 +33,8 @@ get_org_ids.orgs_tbl <- function(data, verbose = TRUE){
       genome_id = purrr::map(genome_query, ~names(.x))
     ) %>%
     tidyr::unnest(genome_query, genome_id) %>%
-    dplyr::distinct()
+    dplyr::distinct() %>%
+    tidyr::separate(genome_query, into = c("genome_name", "genome_desc"), sep = "; ")
 
 
   kegg_uncert <- org_hits %>%
@@ -64,7 +65,7 @@ get_org_ids.keggerator <- function(data, verbose = TRUE){
 
   orgs <- data$orgs_tbl
 
-  ids <- get_org_ids.orgs_tbl(orgs, varbose = verbose)
+  ids <- get_org_ids.orgs_tbl(orgs, verbose = verbose)
 
   data$orgs_id <- ids$orgs_id
   data$kegg_uncert <- ids$kegg_uncert
@@ -84,7 +85,7 @@ get_org_ids.orgs_list <- function(data, verbose){
 
   orgs <- data$orgs_tbl
 
-  ids <- get_org_ids.orgs_tbl(orgs, varbose = verbose)
+  ids <- get_org_ids.orgs_tbl(orgs, verbose = verbose)
 
   data$orgs_id <- ids$orgs_id
   data$kegg_uncert <- ids$kegg_uncert
