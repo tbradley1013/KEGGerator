@@ -14,13 +14,13 @@ get_org_ids.orgs_tbl <- function(data, verbose = TRUE){
 
   unq_orgs <- dplyr::distinct(data, genome)
 
-  output <- unq_orgs %>%
+  org_hits <- unq_orgs %>%
     dplyr::mutate(genome_query = purrr::map(genome, ~{
       query <- kegg_find_safe("genome", .x)
 
       if (verbose){
         cat(
-          "Matching Genomes for ", crayon::red(.x), ": ",
+          "Finding genomes that match ", crayon::red(.x), ": ",
           crayon::blue(length(query)), "\n", sep = ""
         )
       }
@@ -34,8 +34,26 @@ get_org_ids.orgs_tbl <- function(data, verbose = TRUE){
       # n_genomes = purrr::map(genome_query, length)
     ) %>%
     tidyr::unnest(genome_query, genome_id) %>%
-    dplyr::distinct() %>%
-    dplyr::left_join(data, by = "genome")
+    dplyr::distinct()
+
+
+  kegg_uncert <- org_hits %>%
+    dplyr::group_by(genome) %>%
+    dplyr::summarise(
+      n_hits = sum(!is.na(genome_query))
+    ) %>%
+    dplyr::ungroup() %>%
+    dplyr::mutate(
+      uncert = dplyr::if_else(n_hits == 0, 1, 1-(1/n_hits))
+    ) %>%
+    dplyr::inner_join(ps_kegg$orgs_tbl, by = "genome") %>%
+    dplyr::arrange(otu_id)
+
+  class(org_hits) <- c("orgs_id", class(org_hits))
+  class(kegg_uncert) <- c("uncert_tbl", class(kegg_uncert))
+
+  output <- list(orgs_id = org_hits, kegg_uncert = kegg_uncert)
+  class(output) <- c("orgs_list", class(output))
 
   return(output)
 
@@ -48,11 +66,15 @@ get_org_ids.keggerator <- function(data, verbose = TRUE){
 
   ids <- get_org_ids.orgs_tbl(orgs, varbose = verbose)
 
-  data$orgs_id <- ids
+  data$orgs_id <- ids$orgs_id
+  data$kegg_uncert <- ids$kegg_uncert
 
   return(data)
 
 }
+
+
+get_org_ids.orgs_list <- function()
 
 #' @export
 get_genome_id <- function(data, verbose = FALSE) {
