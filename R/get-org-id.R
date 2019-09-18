@@ -100,3 +100,7 @@ get_org_ids.orgs_list <- function(data, verbose){
 }
 
 
+#' @export
+is_orgs_id <- function(x){
+  all(c(inherits(x, "orgs_id"), "genome_id" %in% colnames(x)))
+}
