@@ -34,13 +34,23 @@ get_org_ids.orgs_tbl <- function(data, verbose = TRUE){
       # n_genomes = purrr::map(genome_query, length)
     ) %>%
     tidyr::unnest(genome_query, genome_id) %>%
-    dplyr::distinct()
-
-
-
-
+    dplyr::distinct() %>%
+    dplyr::right_join(data, by = "genome")
 
   return(output)
+
+}
+
+#' @export
+get_org_ids.keggerator <- function(data, verbose = TRUE){
+
+  orgs <- data$orgs_tbl
+
+  ids <- get_org_ids.orgs_tbl(orgs, varbose = verbose)
+
+  data$orgs_id <- ids
+
+  return(data)
 
 }
 
