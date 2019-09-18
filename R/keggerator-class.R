@@ -60,7 +60,7 @@ null_check_req <- function(x, .f){
 }
 
 null_check_opt <- function(x, .f) {
-  if (is.null(x)) return(FALSE)
+  if (is.null(x)) return(TRUE)
 
   .f(x)
 }
