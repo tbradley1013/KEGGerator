@@ -72,7 +72,7 @@ as_keggerator <- function(ps, ...){
   UseMethod("as_keggerator")
 }
 
-#' @describeIn as_keggerator
+#' @describeIn as_keggerator method for phyloseq objects
 #' @export
 as_keggerator.phyloseq <- function(ps, ...){
   # browser()

@@ -27,7 +27,7 @@ orgs_tibble <- function(data, drop_taxa, strict, sep){
   UseMethod("orgs_tibble")
 }
 
-#' @describeIn orgs_tibble
+#' @describeIn orgs_tibble method for tax_tbl
 #' @export
 orgs_tibble.tax_tbl <- function(data, drop_taxa = TRUE, strict = FALSE, sep = "\\/"){
   if (!ids_match(data)){
@@ -81,7 +81,7 @@ orgs_tibble.tax_tbl <- function(data, drop_taxa = TRUE, strict = FALSE, sep = "\
   return(output)
 }
 
-#' @describeIn orgs_tibble
+#' @describeIn orgs_tibble method for keggerator
 #' @export
 orgs_tibble.keggerator <- function(data, drop_taxa = TRUE, strict = FALSE, sep = "\\/"){
 
@@ -96,7 +96,7 @@ orgs_tibble.keggerator <- function(data, drop_taxa = TRUE, strict = FALSE, sep =
 
 }
 
-#' @describeIn orgs_tibble
+#' @describeIn orgs_tibble method for phyloseq object
 #' @export
 orgs_tibble.phyloseq <- function(data, drop_taxa = TRUE, strict = FALSE, sep = "\\/"){
 

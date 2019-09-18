@@ -14,7 +14,7 @@ otu_tibble <- function(data, quiet){
 }
 
 
-#' @describeIn otu_tibble
+#' @describeIn otu_tibble method for phyloseq objects
 #' @export
 otu_tibble.phyloseq <- function(data) {
 
@@ -37,7 +37,7 @@ otu_tibble.phyloseq <- function(data) {
   return(output)
 }
 
-#' @describeIn otu_tibble
+#' @describeIn otu_tibble method for otu_table objects
 #' @export
 otu_tibble.otu_table <- function(data, quiet = FALSE){
   otu <- data
@@ -72,7 +72,7 @@ tax_tibble <- function(data, quiet){
 }
 
 
-#' @describeIn tax_tibble
+#' @describeIn tax_tibble method for phyloseq objects
 #' @export
 tax_tibble.phyloseq <- function(data){
 
@@ -92,7 +92,7 @@ tax_tibble.phyloseq <- function(data){
   return(output)
 }
 
-#' @describeIn tax_tibble
+#' @describeIn tax_tibble method for taxonomyTable objects
 #' @export
 tax_tibble.taxonomyTable <- function(data, quiet = FALSE){
   tax <- data
@@ -124,7 +124,7 @@ sam_tibble <- function(data){
 }
 
 
-#' @describeIn sam_tibble
+#' @describeIn sam_tibble method for phyloseq object
 #' @export
 sam_tibble.phyloseq <- function(data){
   sam_data <- phyloseq::sample_data(data)
@@ -140,7 +140,7 @@ sam_tibble.phyloseq <- function(data){
   return(output)
 }
 
-#' @describeIn sam_tibble
+#' @describeIn sam_tibble method for sample_data object
 #' @export
 sam_tibble.sample_data <- function(data){
 
@@ -167,7 +167,7 @@ otu_ref <- function(data, otu, tax){
 }
 
 
-#' @describeIn otu_ref
+#' @describeIn otu_ref method for phyloseq object
 #' @export
 otu_ref.phyloseq <- function(data){
   ids_match <- check_otu_id(data)
@@ -186,7 +186,7 @@ otu_ref.phyloseq <- function(data){
   return(output)
 }
 
-#' @describeIn otu_ref
+#' @describeIn otu_ref method for otu_table
 #' @export
 otu_ref.otu_table <- function(otu, tax){
   ids_match <- check_otu_id(otu, tax)
@@ -205,11 +205,11 @@ otu_ref.otu_table <- function(otu, tax){
   return(output)
 }
 
-#' @describeIn otu_ref
+#' @describeIn otu_ref method for taxonomyTable object
 #' @export
 otu_ref.taxonomyTable <- otu_ref.otu_table
 
-#' @describeIn otu_ref
+#' @describeIn otu_ref method for tax_tbl object
 #' @export
 otu_ref.tax_tbl <- function(tax){
   id_match <- attr(tax, "id_match")
@@ -222,7 +222,7 @@ otu_ref.tax_tbl <- function(tax){
   return(output)
 }
 
-#' @describeIn otu_ref
+#' @describeIn otu_ref method for otu_tbl object
 #' @export
 otu_ref.otu_tbl <- function(otu){
   id_match <- attr(otu, "id_match")
