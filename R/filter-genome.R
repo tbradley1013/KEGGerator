@@ -25,15 +25,19 @@ filter_orgs_uncert <- function(orgs_id, orgs_tbl, uncert_tbl, uncertainty = 1){
   if (!is_uncert_tbl(uncert_tbl)) stop("uncert_tbl must be of class uncert_tbl", call. = FALSE)
 
   otu_keep <- uncert_tbl %>%
-    dplyr::filter(total_uncert >= uncertainty) %>%
+    dplyr::filter(total_uncert <= uncertainty) %>%
     dplyr::pull(otu_id)
 
-  org_keep <- orgs_tbl %>%
-    dplyr::filter(otu_id %in% otu_keep) %>%
+  otu_keep <- orgs_tbl %>%
+    dplyr::filter(otu_id %in% otu_keep)
+
+  org_keep <- otu_keep %>%
     dplyr::pull(genome)
 
-  output <- orgs_id %>%
+  id_keep <- orgs_id %>%
     dplyr::filter(genome %in% org_keep)
+
+  output <- list(otu_keep = otu_keep, id_keep = id_keep)
 
   return(output)
 
