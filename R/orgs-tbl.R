@@ -71,7 +71,7 @@ orgs_tibble.tax_tbl <- function(data, drop_taxa = TRUE, strict = FALSE, sep = "\
     dplyr::ungroup() %>%
     dplyr::mutate(
       n_spec = dplyr::if_else(otu_id %in% spec_undef, 0L, n_spec),
-      uncert = dplyr::if_else(otu_id %in% spec_undef, 1, 1-(1/n_spec))
+      spec_uncert = dplyr::if_else(otu_id %in% spec_undef, 1, 1-(1/n_spec))
     )
 
   class(orgs) <- c("orgs_tbl", class(orgs))
