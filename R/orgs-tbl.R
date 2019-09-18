@@ -15,7 +15,7 @@
 #' of the species level assignment of each otu. If the otu was not assigned to
 #' the species level than the uncertainty level is 1. If the otu was assigned to
 #' only a single species than the uncertainty level is 0. If the species level
-#' was assigned to N possible species, than the uncertainty level is 1/N.
+#' was assigned to N possible species, than the uncertainty level is 1-(1/N).
 #'
 #' If an object of class keggerator is passed to orgs_tibble than the same two
 #' tbls are returned, but rather than being in a list alone, they are added to
@@ -69,7 +69,7 @@ orgs_tibble.tax_tbl <- function(data, drop_taxa = TRUE, strict = FALSE, sep = "\
     dplyr::group_by(otu_id) %>%
     dplyr::summarize(n_spec = n()) %>%
     dplyr::ungroup() %>%
-    dplyr::mutate(uncert = if_else(otu_id %in% spec_undef, 1, 1/n_spec))
+    dplyr::mutate(uncert = dplyr::if_else(otu_id %in% spec_undef, 1, 1-(1/n_spec)))
 
   class(orgs) <- c("orgs_tbl", class(orgs))
   class(otu_species_uncert) <- c("uncert_tbl", class(otu_species_uncert))
