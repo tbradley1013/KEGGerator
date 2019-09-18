@@ -74,7 +74,7 @@ orgs_tibble.tax_tbl <- function(data, drop_taxa = TRUE, strict = FALSE, sep = "\
   class(orgs) <- c("orgs_tbl", class(orgs))
   class(otu_species_uncert) <- c("uncert_tbl", class(otu_species_uncert))
 
-  output <- list(orgs_tibble = orgs, species_uncert = otu_species_uncert)
+  output <- list(orgs_tbl = orgs, species_uncert = otu_species_uncert)
 
   class(output) <- c("orgs_list", class(output))
 
@@ -89,7 +89,7 @@ orgs_tibble.keggerator <- function(data, drop_taxa = TRUE, strict = FALSE, sep =
 
   orgs <- orgs_tibble.tax_tbl(tax, drop_taxa = drop_taxa, strict = strict, sep = sep)
 
-  data$orgs_tbl <- orgs$orgs_tibble
+  data$orgs_tbl <- orgs$orgs_tbl
   data$species_uncert <- orgs$species_uncert
 
   return(data)
