@@ -12,7 +12,7 @@ library(tidyverse)
 
 ps <- read_rds("../WWTP_Impact_on_Stream/data/ps_orig.RDS")
 
-ps <- filter_taxa(ps, function(x)sum(x)>100, prune = TRUE)
+ps <- filter_taxa(ps, function(x)sum(x)>1000, prune = TRUE)
 
 # gerenate a
 ps_kegg <- as_keggerator(ps)
