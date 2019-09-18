@@ -102,7 +102,7 @@ orgs_tibble.phyloseq <- function(data, drop_taxa = TRUE, strict = FALSE, sep = "
 
   data <- as_keggerator(data)
 
-  output <- orgs_tibble.keggerator(data)
+  output <- orgs_tibble.keggerator(data, drop_taxa = drop_taxa, strict = strict, sep = sep)
 
   return(output)
 }
