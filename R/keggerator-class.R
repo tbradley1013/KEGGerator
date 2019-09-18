@@ -8,9 +8,10 @@
 #'
 #' @export
 keggerator <- function(tax_tbl = NULL, otu_tbl = NULL, sam_tbl = NULL,
-                       otu_ref = NULL, orgs_tbl = NULL, species_uncert = NULL, orgs_id = NULL,
-                       kegg_uncert = NULL, orgs_filt = NULL, orgs_enzymes = NULL,
-                       orgs_orthologies = NULL, orgs_genes = NULL){
+                       otu_ref = NULL, orgs_tbl = NULL, species_uncert = NULL,
+                       orgs_id = NULL, kegg_uncert = NULL, total_uncert = NULL,
+                       orgs_filt = NULL, orgs_enzymes = NULL, orgs_orthologies = NULL,
+                       orgs_genes = NULL){
   # These first four arguments are required in order to build the keggerator object
   if (!null_check_req(tax_tbl, is_tax_tbl)) stop("argument tax_tbl must not be null and be of class tax_tbl", call. = FALSE)
   if (!null_check_req(otu_tbl, is_otu_tbl)) stop("argument otu_tbl must not be null and be of class otu_tbl", call. = FALSE)
@@ -40,6 +41,7 @@ keggerator <- function(tax_tbl = NULL, otu_tbl = NULL, sam_tbl = NULL,
       "species_uncert" = species_uncert,
       "orgs_id" = orgs_id,
       "kegg_uncert" = kegg_uncert,
+      "total_uncert" = total_uncert,
       "orgs_filt" = orgs_filt,
       "orgs_enzymes" = orgs_enzymes,
       "orgs_orthologies" = orgs_orthologies,
