@@ -96,6 +96,17 @@ orgs_tibble.keggerator <- function(data, drop_taxa = TRUE, strict = FALSE, sep =
 
 }
 
+#' @describeIn orgs_tibble
+#' @export
+orgs_tibble.phyloseq <- function(data, drop_taxa = TRUE, strict = FALSE, sep = "\\/"){
+
+  data <- as_keggerator(data)
+
+  output <- orgs_tibble.keggerator(data)
+
+  return(output)
+}
+
 is_orgs_list <- function(x){
   inherits(x, "orgs_list")
 }
