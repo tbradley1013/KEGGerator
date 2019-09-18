@@ -1,3 +1,23 @@
+#' Filter OTUs and kegg organisms
+#'
+#'
+filter_orgs <- function(data, uncertainty, pathway_name, pathways){
+  UseMethod("filter_orgs")
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 #' Filter out genomes by pathway
 #'
 #' @param data a tibble that has genome_ids - likely the output from get_genome_id()
