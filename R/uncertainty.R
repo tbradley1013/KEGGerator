@@ -38,7 +38,7 @@ keggerator_uncertainty.orgs_list <- function(data){
 
 uncertainty_internal <- function(spec_uncert, kegg_uncert){
 
-    kegg_uncert_otu <- kegg_uncert %>%
+  kegg_uncert_otu <- kegg_uncert %>%
     dplyr::group_by(otu_id) %>%
     dplyr::summarize(total_kegg_hits = sum(n_hits)) %>%
     dplyr::ungroup()
