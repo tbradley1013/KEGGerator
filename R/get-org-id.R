@@ -12,7 +12,9 @@ get_org_ids <- function(data, verbose){
 get_org_ids.orgs_tbl <- function(data, verbose = TRUE){
   if (!is_orgs_tbl) stop("data must have column named genome", call. = FALSE)
 
-  output <- data %>%
+  unq_orgs <- dplyr::distinct(data, genome)
+
+  output <- unq_orgs %>%
     dplyr::mutate(genome_query = purrr::map(genome, ~{
       query <- kegg_find_safe("genome", .x)
 
@@ -27,7 +29,10 @@ get_org_ids.orgs_tbl <- function(data, verbose = TRUE){
     })) %>%
     dplyr::filter(purrr::map(genome_query, length) > 0,
                   !is.na(genome_query)) %>%
-    dplyr::mutate(genome_id = purrr::map(genome_query, ~names(.x))) %>%
+    dplyr::mutate(
+      genome_id = purrr::map(genome_query, ~names(.x))
+      # n_genomes = purrr::map(genome_query, length)
+    ) %>%
     tidyr::unnest(genome_query, genome_id) %>%
     dplyr::distinct()
 
