@@ -10,7 +10,7 @@ get_org_ids <- function(data, verbose){
 }
 
 get_org_ids.orgs_tbl <- function(data, verbose = TRUE){
-  if (!is_orgs_tbl) stop("data must have column named genome", call. = FALSE)
+  if (!is_orgs_tbl(data)) stop("data must have column named genome", call. = FALSE)
 
   unq_orgs <- dplyr::distinct(data, genome)
 
@@ -35,7 +35,7 @@ get_org_ids.orgs_tbl <- function(data, verbose = TRUE){
     ) %>%
     tidyr::unnest(genome_query, genome_id) %>%
     dplyr::distinct() %>%
-    dplyr::right_join(data, by = "genome")
+    dplyr::left_join(data, by = "genome")
 
   return(output)
 
