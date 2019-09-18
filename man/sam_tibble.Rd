@@ -2,9 +2,15 @@
 % Please edit documentation in R/phyloseq-to-tibbles.R
 \name{sam_tibble}
 \alias{sam_tibble}
+\alias{sam_tibble.phyloseq}
+\alias{sam_tibble.sample_data}
 \title{Convert sam_data to tibble}
 \usage{
 sam_tibble(data)
+
+\method{sam_tibble}{phyloseq}(data)
+
+\method{sam_tibble}{sample_data}(data)
 }
 \arguments{
 \item{data}{a phyloseq object}
@@ -12,3 +18,10 @@ sam_tibble(data)
 \description{
 Convert sam_data to tibble
 }
+\section{Methods (by class)}{
+\itemize{
+\item \code{phyloseq}: method for phyloseq object
+
+\item \code{sample_data}: method for sample_data object
+}}
+

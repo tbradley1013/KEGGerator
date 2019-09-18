@@ -2,9 +2,15 @@
 % Please edit documentation in R/phyloseq-to-tibbles.R
 \name{tax_tibble}
 \alias{tax_tibble}
+\alias{tax_tibble.phyloseq}
+\alias{tax_tibble.taxonomyTable}
 \title{Convert tax table to tibble}
 \usage{
 tax_tibble(data, quiet)
+
+\method{tax_tibble}{phyloseq}(data)
+
+\method{tax_tibble}{taxonomyTable}(data, quiet = FALSE)
 }
 \arguments{
 \item{data}{a phyloseq object}
@@ -14,3 +20,10 @@ tax_tibble(data, quiet)
 \description{
 Convert tax table to tibble
 }
+\section{Methods (by class)}{
+\itemize{
+\item \code{phyloseq}: method for phyloseq objects
+
+\item \code{taxonomyTable}: method for taxonomyTable objects
+}}
+

@@ -2,9 +2,24 @@
 % Please edit documentation in R/phyloseq-to-tibbles.R
 \name{otu_ref}
 \alias{otu_ref}
+\alias{otu_ref.phyloseq}
+\alias{otu_ref.otu_table}
+\alias{otu_ref.taxonomyTable}
+\alias{otu_ref.tax_tbl}
+\alias{otu_ref.otu_tbl}
 \title{Create a otu reference table}
 \usage{
 otu_ref(data, otu, tax)
+
+\method{otu_ref}{phyloseq}(data)
+
+\method{otu_ref}{otu_table}(otu, tax)
+
+\method{otu_ref}{taxonomyTable}(otu, tax)
+
+\method{otu_ref}{tax_tbl}(tax)
+
+\method{otu_ref}{otu_tbl}(otu)
 }
 \arguments{
 \item{data}{an object to convert to otu_ref}
@@ -12,3 +27,16 @@ otu_ref(data, otu, tax)
 \description{
 Create a otu reference table
 }
+\section{Methods (by class)}{
+\itemize{
+\item \code{phyloseq}: method for phyloseq object
+
+\item \code{otu_table}: method for otu_table
+
+\item \code{taxonomyTable}: method for taxonomyTable object
+
+\item \code{tax_tbl}: method for tax_tbl object
+
+\item \code{otu_tbl}: method for otu_tbl object
+}}
+

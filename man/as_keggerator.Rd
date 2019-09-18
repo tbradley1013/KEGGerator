@@ -2,10 +2,23 @@
 % Please edit documentation in R/keggerator-class.R
 \name{as_keggerator}
 \alias{as_keggerator}
+\alias{as_keggerator.phyloseq}
 \title{Convert an object into class keggerator}
 \usage{
-as_keggerator(x)
+as_keggerator(ps, ...)
+
+\method{as_keggerator}{phyloseq}(ps, ...)
+}
+\arguments{
+\item{ps}{a phyloseq object to be converted to a keggerator object}
+
+\item{...}{additional arguements to be passed to \code{\link[KEGGerator]{keggerator}}}
 }
 \description{
 Convert an object into class keggerator
 }
+\section{Methods (by class)}{
+\itemize{
+\item \code{phyloseq}: method for phyloseq objects
+}}
+

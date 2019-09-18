@@ -5,9 +5,9 @@
 \title{A keggerator object}
 \usage{
 keggerator(tax_tbl = NULL, otu_tbl = NULL, sam_tbl = NULL,
-  otu_ref = NULL, orgs_tbl = NULL, orgs_id = NULL,
-  orgs_filt = NULL, orgs_enzymes = NULL, orgs_orthologies = NULL,
-  orgs_genes = NULL)
+  otu_ref = NULL, orgs_tbl = NULL, species_uncert = NULL,
+  orgs_id = NULL, orgs_filt = NULL, orgs_enzymes = NULL,
+  orgs_orthologies = NULL, orgs_genes = NULL)
 }
 \value{
 an object of class keggerator

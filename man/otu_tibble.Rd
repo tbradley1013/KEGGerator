@@ -2,9 +2,15 @@
 % Please edit documentation in R/phyloseq-to-tibbles.R
 \name{otu_tibble}
 \alias{otu_tibble}
+\alias{otu_tibble.phyloseq}
+\alias{otu_tibble.otu_table}
 \title{Convert OTU table to tibble}
 \usage{
 otu_tibble(data, quiet)
+
+\method{otu_tibble}{phyloseq}(data)
+
+\method{otu_tibble}{otu_table}(data, quiet = FALSE)
 }
 \arguments{
 \item{data}{a phyloseq object}
@@ -14,3 +20,10 @@ otu_tibble(data, quiet)
 \description{
 Convert OTU table to tibble
 }
+\section{Methods (by class)}{
+\itemize{
+\item \code{phyloseq}: method for phyloseq objects
+
+\item \code{otu_table}: method for otu_table objects
+}}
+
