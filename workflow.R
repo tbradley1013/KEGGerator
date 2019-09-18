@@ -17,6 +17,8 @@ ps <- filter_taxa(ps, function(x)sum(x)>1000, prune = TRUE)
 # gerenate a
 ps_kegg <- as_keggerator(ps)
 
+ps_kegg <- orgs_tibble(ps_kegg)
+
 
 ps_genomes <- genomes_tibble(ps)
 
