@@ -5,7 +5,7 @@
 #' @details This took ~4.4 minutes to run for 400 organisms
 #'
 #' @export
-get_org_ids <- function(data, verbose){
+get_org_ids <- function(data, verbose, progress){
   UseMethod("get_org_ids")
 }
 
@@ -69,11 +69,11 @@ get_org_ids.orgs_tbl <- function(data, verbose = TRUE, progress = TRUE){
 
 #' @describeIn get_org_ids method for keggerator
 #' @export
-get_org_ids.keggerator <- function(data, verbose = TRUE){
+get_org_ids.keggerator <- function(data, verbose = FALSE, progress = TRUE){
 
   orgs <- data$orgs_tbl
 
-  ids <- get_org_ids.orgs_tbl(orgs, verbose = verbose)
+  ids <- get_org_ids.orgs_tbl(orgs, verbose = verbose, progress = progress)
 
   data$orgs_id <- ids$orgs_id
   data$kegg_uncert <- ids$kegg_uncert
@@ -89,11 +89,11 @@ get_org_ids.keggerator <- function(data, verbose = TRUE){
 
 #' @describeIn get_org_ids method for orgs_list
 #' @export
-get_org_ids.orgs_list <- function(data, verbose){
+get_org_ids.orgs_list <- function(data, verbose = FALSE, progress = TRUE){
 
   orgs <- data$orgs_tbl
 
-  ids <- get_org_ids.orgs_tbl(orgs, verbose = verbose)
+  ids <- get_org_ids.orgs_tbl(orgs, verbose = verbose, progress = progress)
 
   data$orgs_id <- ids$orgs_id
   data$kegg_uncert <- ids$kegg_uncert
