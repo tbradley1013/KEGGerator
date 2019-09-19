@@ -46,7 +46,7 @@ filter_orgs_uncert <- function(orgs_id, orgs_tbl, uncert_tbl, uncertainty = 1){
 
 
 
-filter_orgs_pathway <- function(orgs_id, pathway_name, pathways = NULL){
+filter_orgs_pathway <- function(orgs_id, pathway_name, pathways = NULL, verbose = TRUE){
   if (is.null(pathways)){
     pathways <- kegg_pathways
   } else{
@@ -55,18 +55,29 @@ filter_orgs_pathway <- function(orgs_id, pathway_name, pathways = NULL){
     }
   }
 
-  if (!any(stringr::str_detect(pathways$pathway, pathway_name))) stop("pathway_name had no matches in pathways dataset", call. = FALSE)
+  if (!any(stringr::str_detect(stringr::str_to_lower(pathways$pathway), stringr::str_to_lower(pathway_name)))){
+    stop("pathway_name had no matches in pathways dataset", call. = FALSE)
+  }
 
   pathway_ids <- pathways %>%
-    dplyr::filter(stringr::str_detect(pathway, pathway_name)) %>%
+    dplyr::filter(stringr::str_detect(stringr::str_to_lower(pathway), stringr::str_to_lower(pathway_name))) %>%
     dplyr::mutate(pathway_id = stringr::str_replace(pathway_id, "path:map", "")) %>%
     dplyr::pull(pathway_id)
 
   output <- orgs_id %>%
     dplyr::mutate(
       genome_id = stringr::str_replace(genome_id, "gn:", ""),
-      pathway = purrr::map(genome_id, ~{
-        kegg_link_safe("pathway", .x)
+      pathway = purrr::map(genome_id, genome_desc, ~{
+
+        paths = kegg_link_safe("pathway", .x)
+
+        if (verbose){
+          cat(
+            "Linking pathways to ", crayon::red(.y), ": ",
+            crayon::blue(length(paths)), " linked\n", sep = ""
+          )
+        }
+        return(paths)
       }),
       # pathway = purrr::map(pathway, ~purrr::discard(.x, function(x){!stringr::str_detect(x, pathway_ids)}))
       pathway = purrr::map(pathway, ~{
