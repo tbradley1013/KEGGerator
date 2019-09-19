@@ -1,12 +1,12 @@
 #' Filter OTUs and kegg organisms
 #'
 #'
-filter_orgs <- function(data, uncertainty, pathway_name, pathways){
+filter_orgs <- function(data, uncertainty, pathway_name, pathways, verbose){
   UseMethod("filter_orgs")
 }
 
 
-filter_orgs_internal <- function(org_ids, orgs_tbl, uncert_tbl, uncertainty = 1, pathway_name = NULL, pathways = NULL){
+filter_orgs_internal <- function(org_ids, orgs_tbl, uncert_tbl, uncertainty = 1, pathway_name = NULL, pathways = NULL, verbose = TRUE){
 
   out <- filter_orgs_uncert(orgs_id = orgs_id, orgs_tbl = orgs_tbl,
                             uncert_tbl = uncert_tbl, uncertainty = uncertainty)
@@ -46,7 +46,7 @@ filter_orgs_uncert <- function(orgs_id, orgs_tbl, uncert_tbl, uncertainty = 1){
 
 
 
-filter_orgs_pathway <- function(orgs_id, pathway_name, pathways = NULL, verbose = TRUE){
+filter_orgs_pathway <- function(orgs_id, pathway_name, pathways = NULL, verbose = FALSE, progress = TRUE){
   if (is.null(pathways)){
     pathways <- kegg_pathways
   } else{
@@ -64,10 +64,15 @@ filter_orgs_pathway <- function(orgs_id, pathway_name, pathways = NULL, verbose 
     dplyr::mutate(pathway_id = stringr::str_replace(pathway_id, "path:map", "")) %>%
     dplyr::pull(pathway_id)
 
+  if (progress){
+    p <- dplyr::progress_estimated(nrow(orgs_id), 10)
+  }
+
+
   output <- orgs_id %>%
     dplyr::mutate(
       genome_id = stringr::str_replace(genome_id, "gn:", ""),
-      pathway = purrr::map(genome_id, genome_desc, ~{
+      pathway = purrr::map2(genome_id, genome_desc, ~{
 
         paths = kegg_link_safe("pathway", .x)
 
@@ -77,6 +82,11 @@ filter_orgs_pathway <- function(orgs_id, pathway_name, pathways = NULL, verbose 
             crayon::blue(length(paths)), " linked\n", sep = ""
           )
         }
+
+        if (progress){
+          p$pause(0.1)$tick()$print()
+        }
+
         return(paths)
       }),
       # pathway = purrr::map(pathway, ~purrr::discard(.x, function(x){!stringr::str_detect(x, pathway_ids)}))
