@@ -28,6 +28,10 @@ get_pathway_modules <- function(pathway_name) {
   return(pathway)
 }
 
+## THIS IS USED IN THE get_genome_enzymes AND get_genome_orthologies FUNCTIONS
+## AND WILL NEED TO BE MODIFIED ONCE CLASSES ARE ADDED TO THESE OUTPUTS IF THAT
+## ROUTE IS PURSUED
+
 
 #' Query all enzymes associated with a given pathway
 #'
