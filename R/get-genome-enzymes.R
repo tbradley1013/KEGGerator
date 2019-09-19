@@ -18,6 +18,8 @@ get_enzymes <- function(data, pathway_enzymes, kegg_enzymes,
   UseMethod("get_enzymes")
 }
 
+#' @describeIn get_enzymes method for keggerator objects
+#' @export
 get_enzymes.keggerator <- function(data, pathway_enzymes = NULL, kegg_enzymes = NULL,
                                    verbose = FALSE, progress = TRUE){
 
@@ -32,8 +34,9 @@ get_enzymes.keggerator <- function(data, pathway_enzymes = NULL, kegg_enzymes = 
 }
 
 
-
-get_enzyme.orgs_id <- function(orgs_id, pathway_enzymes = NULL, kegg_enzymes = NULL, verbose = FALSE, progress = TRUE){
+#' @describeIn get_enzymes method for orgs_id objects
+#' @export
+get_enzymes.orgs_id <- function(orgs_id, pathway_enzymes = NULL, kegg_enzymes = NULL, verbose = FALSE, progress = TRUE){
 
   if (is.null(kegg_enzyme)){
     kegg_enzyme <- KEGGerator::kegg_enzymes
