@@ -30,7 +30,7 @@ get_org_ids.orgs_tbl <- function(data, verbose = TRUE, progress = TRUE){
       }
 
       if (progress){
-        p$pause(0.1)$tick()$print()
+        p$tick()$print()
       }
 
       return(query)
@@ -63,6 +63,10 @@ get_org_ids.orgs_tbl <- function(data, verbose = TRUE, progress = TRUE){
 
   output <- list(orgs_id = org_hits, kegg_uncert = kegg_uncert)
   class(output) <- c("orgs_list", class(output))
+
+  if (verbose & progress){
+    p$stop()
+  }
 
   return(output)
 

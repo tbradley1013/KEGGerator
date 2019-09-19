@@ -167,7 +167,7 @@ filter_orgs_pathway <- function(orgs_id, pathway_name, pathways = NULL, verbose 
         }
 
         if (progress){
-          p$pause(0.1)$tick()$print()
+          p$tick()$print()
         }
 
         return(paths)
@@ -186,6 +186,10 @@ filter_orgs_pathway <- function(orgs_id, pathway_name, pathways = NULL, verbose 
       })
     ) %>%
     dplyr::filter(purrr::map_lgl(pathway, ~{length(.x) > 0}))
+
+  if (verbose & progress){
+    p$stop()
+  }
 
   attr(output, "genome_removed_pathway") <- orgs_id$genome_id[!orgs_id$stringr::str_replace(genome_id, "gn:", "") %in% output$genome_id]
 
