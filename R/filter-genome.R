@@ -6,27 +6,44 @@ filter_orgs <- function(data, uncertainty, pathway_name, pathways, verbose, prog
 }
 
 
+filter_orgs.keggerator <- function(data, uncertainty = 1, pathway_name = NULL,
+                                   pathways = NULL, verbose = FALSE, progress = TRUE){
+
+  if (is.null(data$orgs_tbl)) stop("orgs_tbl slot of keggerator object is NULL, have you run orgs_tibble()?", call. = FALSE)
+  if(!is_orgs_tbl(data$orgs_tbl)) stop("orgs_tbl slow is not of class orgs_tbl. Did you generate it with orgs_tibble()?", call. = FALSE)
+  if (is.null(data$orgs_id)) stop("orgs_id slot of keggerator object is NULL, have you run get_org_ids()?", call. = FALSE)
+  if (!is_orgs_id(data$orgs_id)) stop("orgs_id slot is not of class orgs_id. Did you generate it with get_org_ids()?", call. = FALSE)
+  if (is.null(total_uncertainty))
+
+}
 
 
-filter_orgs_internal <- function(org_ids, orgs_tbl, uncert_tbl, uncertainty = 1,
+filter_orgs_internal <- function(orgs_id, orgs_tbl, uncert_tbl = NULL, uncertainty = 1,
                                  pathway_name = NULL, pathways = NULL, verbose = FALSE,
                                  progress = TRUE){
 
-  out <- filter_orgs_uncert(orgs_id = orgs_id, orgs_tbl = orgs_tbl,
-                            uncert_tbl = uncert_tbl, uncertainty = uncertainty)
+  if (!is.null(uncert_tbl)){
+    out <- filter_orgs_uncert(orgs_id = orgs_id, orgs_tbl = orgs_tbl,
+                              uncert_tbl = uncert_tbl, uncertainty = uncertainty)
 
-  n_removed_uncert <- nrow(orgs_id) - nrow(out)
+    n_removed_uncert <- nrow(orgs_id) - nrow(out)
+    # ids_removed_uncert <- orgs_id$genome_id[!orgs_id$genome_id %in% out$genome_id]
 
-  if (verbose | progress){
-    cat(crayon::red(n_removed_uncert), " organisms removed because uncertainty was greater than ", crayon::red(uncertainty), "\n")
+    if (verbose | progress){
+      cat(crayon::red(n_removed_uncert), " organisms removed because uncertainty was greater than ", crayon::red(uncertainty), "\n")
+    }
   }
 
 
 
+
+
   if (!is.null(pathway_name)){
+    n_current <- nrow(out)
+
     out <- filter_orgs_pathway(orgs_id = out, pathway_name = pathway_name, pathways = pathways)
 
-    n_removed_path <- nrow(orgs_id) - n_removed_uncert - nrow(out)
+    n_removed_path <- n_current - nrow(out)
 
     if (verbose | progress){
       cat(crayon::red(n_removed_path), " organisms removed because they were not linked with the ",
@@ -35,7 +52,12 @@ filter_orgs_internal <- function(org_ids, orgs_tbl, uncert_tbl, uncertainty = 1,
 
   }
 
-  return(out)
+  if (is.null(uncert_tbl) & is.null(pathway_name)){
+    warning("uncert_tbl and pathway_name were both NULL. No filtration was performed and the original object will be returned", call. = FALSE)
+    return(orgs_id)
+  } else {
+    return(out)
+  }
 
 }
 
@@ -44,12 +66,12 @@ filter_orgs_uncert <- function(orgs_id, orgs_tbl, uncert_tbl, uncertainty = 1){
   if (!is_orgs_id(orgs_id)) stop("orgs_id must be of class orgs_id", call. = FALSE)
   if (!is_uncert_tbl(uncert_tbl)) stop("uncert_tbl must be of class uncert_tbl", call. = FALSE)
 
-  otu_keep <- uncert_tbl %>%
+  otu_id_keep <- uncert_tbl %>%
     dplyr::filter(total_uncert <= uncertainty) %>%
     dplyr::pull(otu_id)
 
   otu_keep <- orgs_tbl %>%
-    dplyr::filter(otu_id %in% otu_keep)
+    dplyr::filter(otu_id %in% otu_id_keep)
 
   org_keep <- otu_keep %>%
     dplyr::pull(genome)
@@ -57,7 +79,9 @@ filter_orgs_uncert <- function(orgs_id, orgs_tbl, uncert_tbl, uncertainty = 1){
   id_keep <- orgs_id %>%
     dplyr::filter(genome %in% org_keep)
 
-  output <- list(otu_keep = otu_keep, id_keep = id_keep)
+  output <- id_keep
+
+  attr(output, "genome_removed_uncert") <- orgs_id$genome_id[!orgs_id$genome %in% org_keep]
 
   return(output)
 
@@ -123,6 +147,8 @@ filter_orgs_pathway <- function(orgs_id, pathway_name, pathways = NULL, verbose 
       })
     ) %>%
     dplyr::filter(purrr::map_lgl(pathway, ~{length(.x) > 0}))
+
+  attr(output, "genome_removed_pathway") <- orgs_id$genome_id[!orgs_id$stringr::str_replace(genome_id, "gn:", "") %in% output$genome_id]
 
   return(output)
 
