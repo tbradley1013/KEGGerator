@@ -1,11 +1,12 @@
 #' Filter OTUs and kegg organisms
 #'
-#'
+#' @export
 filter_orgs <- function(data, uncertainty, pathway_name, pathways, verbose, progress){
   UseMethod("filter_orgs")
 }
 
-
+#' @describeIn filter_orgs method for keggerator objects
+#' @export
 filter_orgs.keggerator <- function(data, uncertainty = 1, pathway_name = NULL,
                                    pathways = NULL, verbose = FALSE, progress = TRUE){
 
@@ -13,8 +14,45 @@ filter_orgs.keggerator <- function(data, uncertainty = 1, pathway_name = NULL,
   if(!is_orgs_tbl(data$orgs_tbl)) stop("orgs_tbl slow is not of class orgs_tbl. Did you generate it with orgs_tibble()?", call. = FALSE)
   if (is.null(data$orgs_id)) stop("orgs_id slot of keggerator object is NULL, have you run get_org_ids()?", call. = FALSE)
   if (!is_orgs_id(data$orgs_id)) stop("orgs_id slot is not of class orgs_id. Did you generate it with get_org_ids()?", call. = FALSE)
-  if (is.null(total_uncertainty))
 
+  filtered_orgs <- filter_orgs_internal(
+    orgs_id = data$orgs_id,
+    orgs_tbl = data$orgs_tbl,
+    uncert_tbl = data$total_uncert,
+    uncertainty = uncertainty,
+    pathway_name = pathway_name,
+    pathways = pathways,
+    verbose = verbose,
+    progress = progress
+  )
+
+  data$orgs_filt <- filtered_orgs
+
+  return(data)
+
+}
+
+filter_orgs.orgs_list <- function(data, uncertainty = 1, pathway_name = NULL,
+                                  pathways = NULL, verbose = FALSE, progress = TRUE){
+  if (is.null(data$orgs_tbl)) stop("orgs_tbl slot of orgs_list object is NULL, have you run orgs_tibble()?", call. = FALSE)
+  if(!is_orgs_tbl(data$orgs_tbl)) stop("orgs_tbl slow is not of class orgs_tbl. Did you generate it with orgs_tibble()?", call. = FALSE)
+  if (is.null(data$orgs_id)) stop("orgs_id slot of orgs_list object is NULL, have you run get_org_ids()?", call. = FALSE)
+  if (!is_orgs_id(data$orgs_id)) stop("orgs_id slot is not of class orgs_id. Did you generate it with get_org_ids()?", call. = FALSE)
+
+  filtered_orgs <- filter_orgs_internal(
+    orgs_id = data$orgs_id,
+    orgs_tbl = data$orgs_tbl,
+    uncert_tbl = data$total_uncert,
+    uncertainty = uncertainty,
+    pathway_name = pathway_name,
+    pathways = pathways,
+    verbose = verbose,
+    progress = progress
+  )
+
+  data$orgs_filt <- filtered_orgs
+
+  return(data)
 }
 
 
@@ -56,6 +94,7 @@ filter_orgs_internal <- function(orgs_id, orgs_tbl, uncert_tbl = NULL, uncertain
     warning("uncert_tbl and pathway_name were both NULL. No filtration was performed and the original object will be returned", call. = FALSE)
     return(orgs_id)
   } else {
+    attr(out, "filtered") <- TRUE
     return(out)
   }
 
