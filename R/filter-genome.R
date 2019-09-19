@@ -1,18 +1,38 @@
 #' Filter OTUs and kegg organisms
 #'
 #'
-filter_orgs <- function(data, uncertainty, pathway_name, pathways, verbose){
+filter_orgs <- function(data, uncertainty, pathway_name, pathways, verbose, progress){
   UseMethod("filter_orgs")
 }
 
 
-filter_orgs_internal <- function(org_ids, orgs_tbl, uncert_tbl, uncertainty = 1, pathway_name = NULL, pathways = NULL, verbose = TRUE){
+
+
+filter_orgs_internal <- function(org_ids, orgs_tbl, uncert_tbl, uncertainty = 1,
+                                 pathway_name = NULL, pathways = NULL, verbose = FALSE,
+                                 progress = TRUE){
 
   out <- filter_orgs_uncert(orgs_id = orgs_id, orgs_tbl = orgs_tbl,
                             uncert_tbl = uncert_tbl, uncertainty = uncertainty)
 
+  n_removed_uncert <- nrow(orgs_id) - nrow(out)
+
+  if (verbose | progress){
+    cat(crayon::red(n_removed_uncert), " organisms removed because uncertainty was greater than ", crayon::red(uncertainty), "\n")
+  }
+
+
+
   if (!is.null(pathway_name)){
     out <- filter_orgs_pathway(orgs_id = out, pathway_name = pathway_name, pathways = pathways)
+
+    n_removed_path <- nrow(orgs_id) - n_removed_uncert - nrow(out)
+
+    if (verbose | progress){
+      cat(crayon::red(n_removed_path), " organisms removed because they were not linked with the ",
+          crayon::red(pathway_name), " pathway in KEGG\n")
+    }
+
   }
 
   return(out)
