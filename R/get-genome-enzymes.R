@@ -13,42 +13,27 @@
 #' that are related with the pathway of interest.
 #'
 #' @export
-get_genome_enzymes <- function(data, pathway_enzymes = NULL, kegg_enzyme = NULL){
-  if (!"tbl_df" %in% class(data)) stop("data must be of class 'tbl_df'")
-  if (!"genome_id" %in% colnames(data)) stop("data must have column named 'genome_id'")
-
-  if (is.null(kegg_enzyme)){
-    kegg_enzyme <- KEGGerator::kegg_enzymes
-  } else{
-    if (!is_kegg_tbl(kegg_enzyme, "enzyme")){
-      stop("kegg_enzyme must be a kegg_tbl with columns enzyme and enzyme_id", call. = FALSE)
-    }
-  }
-
-  output <- data %>%
-    dplyr::mutate(
-      enzyme_id = purrr::map(genome_id, ~{
-        id <- stringr::str_replace(.x, "gn:", "")
-
-        enzymes <- kegg_link_safe("enzyme", id) %>%
-          unique()
-
-        if (!is.null(pathway_enzymes)) {
-          enzymes <- enzymes[enzymes %in% pathway_enzymes]
-        }
-
-        return(enzymes)
-      })
-    ) %>%
-    tidyr::unnest(enzyme_id) %>%
-    dplyr::left_join(kegg_enzyme, by = "enzyme_id")
-
-  return(output)
+get_enzymes <- function(data, pathway_enzymes, kegg_enzymes,
+                        verbose, progress){
+  UseMethod("get_enzymes")
 }
 
-get_enzyme_internal <- function(orgs_id, pathway_enzymes = NULL, kegg_enzymes = NULL, verbose = FALSE, progress = TRUE){
+get_enzymes.keggerator <- function(data, pathway_enzymes = NULL, kegg_enzymes = NULL,
+                                   verbose = FALSE, progress = TRUE){
 
-  if (!is_orgs_id(orgs_id)) stop("orgs_id must be of class orgs_id", call. = FALSE)
+  if (is.null(data$orgs_id)) stop("orgs_id is NULL. Have you run get_orgs_id() yet?", call. = FALSE)
+  if (!is_orgs_id(data$orgs_id)) stop("object in orgs_id slot is not of class orgs_id. Did you run get_orgs_id()?")
+
+  enzymes <- get_enzyme.orgs_id(data$orgs_id, pathway_enzymes = pathway_enzymes, kegg_enzymes = kegg_enzymes,
+                                verbose = verbose, progress = progress)
+
+
+
+}
+
+
+
+get_enzyme.orgs_id <- function(orgs_id, pathway_enzymes = NULL, kegg_enzymes = NULL, verbose = FALSE, progress = TRUE){
 
   if (is.null(kegg_enzyme)){
     kegg_enzyme <- KEGGerator::kegg_enzymes
@@ -84,7 +69,12 @@ get_enzyme_internal <- function(orgs_id, pathway_enzymes = NULL, kegg_enzymes = 
         n_remain <- length(enzymes)
 
         if (verbose){
-          cat("Linked ", crayon::red(n_hits), " (", crayon::red(n_remain),  " within the pathway specified) enzymes to genome: ", crayon::blue(.x), )
+          if (!is.null(pathway_enzymes)){
+            cat("Linked ", crayon::red(n_hits), " (", crayon::red(n_remain),  " within the pathway specified) enzymes to genome: ", crayon::blue(.x), )
+          } else {
+            cat("Linked ", crayon::red(n_hits), " enzymes to genome: ", crayon::blue(.x), )
+          }
+
         }
 
         if (progress){
