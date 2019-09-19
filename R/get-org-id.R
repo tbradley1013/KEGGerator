@@ -9,10 +9,14 @@ get_org_ids <- function(data, verbose){
   UseMethod("get_org_ids")
 }
 
-get_org_ids.orgs_tbl <- function(data, verbose = TRUE){
+get_org_ids.orgs_tbl <- function(data, verbose = TRUE, progress = TRUE){
   if (!is_orgs_tbl(data)) stop("data must have column named genome", call. = FALSE)
 
   unq_orgs <- dplyr::distinct(data, genome)
+
+  if (progress){
+    p <- dplyr::progress_estimated(nrow(unq_orgs), 10)
+  }
 
   org_hits <- unq_orgs %>%
     dplyr::mutate(genome_query = purrr::map(genome, ~{
@@ -23,6 +27,10 @@ get_org_ids.orgs_tbl <- function(data, verbose = TRUE){
           "Finding genomes that match ", crayon::red(.x), ": ",
           crayon::blue(length(query)), "\n", sep = ""
         )
+      }
+
+      if (progress){
+        p$pause(0.1)$tick()$print()
       }
 
       return(query)
