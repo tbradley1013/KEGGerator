@@ -30,6 +30,8 @@ keggerator_uncertainty.orgs_list <- function(data){
   if (is.null(spec)) stop("the `species_uncert` slot is empty in your orgs_list object, have you run orgs_tibble() yet?", call. = FALSE)
   if (is.null(kegg)) stop("the `kegg_uncert` slot is empty in your orgs_list object, have you run get_org_ids() yet?", call. = FALSE)
 
+  total_uncert <- uncertainty_internal(spec, kegg)
+
   data$total_uncert <- total_uncert
   return(data)
 }
