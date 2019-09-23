@@ -196,7 +196,7 @@ filter_orgs_pathway <- function(orgs_id, pathway_name, pathways = NULL, verbose 
     p$stop()
   }
 
-  attr(output, "genome_removed_pathway") <- orgs_id$genome_id[!orgs_id$stringr::str_replace(genome_id, "gn:", "") %in% output$genome_id]
+  attr(output, "genome_removed_pathway") <- orgs_id$genome_id[!stringr::str_replace(orgs_id$genome_id, "gn:", "") %in% output$genome_id]
 
   return(output)
 
