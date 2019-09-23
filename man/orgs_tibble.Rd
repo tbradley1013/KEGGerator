@@ -40,7 +40,7 @@ is the uncertainty tibble which is comprised of the percent uncertainty [0-1]
 of the species level assignment of each otu. If the otu was not assigned to
 the species level than the uncertainty level is 1. If the otu was assigned to
 only a single species than the uncertainty level is 0. If the species level
-was assigned to N possible species, than the uncertainty level is 1/N.
+was assigned to N possible species, than the uncertainty level is 1-(1/N).
 
 If an object of class keggerator is passed to orgs_tibble than the same two
 tbls are returned, but rather than being in a list alone, they are added to

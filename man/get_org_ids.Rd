@@ -2,9 +2,16 @@
 % Please edit documentation in R/get-org-id.R
 \name{get_org_ids}
 \alias{get_org_ids}
+\alias{get_org_ids.keggerator}
+\alias{get_org_ids.orgs_list}
 \title{retrieve KEGG genome id for all organims}
 \usage{
-get_org_ids(data, verbose)
+get_org_ids(data, verbose, progress)
+
+\method{get_org_ids}{keggerator}(data, verbose = FALSE,
+  progress = TRUE)
+
+\method{get_org_ids}{orgs_list}(data, verbose = FALSE, progress = TRUE)
 }
 \arguments{
 \item{data}{dataset of genome names to get id for}
@@ -15,3 +22,10 @@ retrieve KEGG genome id for all organims
 \details{
 This took ~4.4 minutes to run for 400 organisms
 }
+\section{Methods (by class)}{
+\itemize{
+\item \code{keggerator}: method for keggerator
+
+\item \code{orgs_list}: method for orgs_list
+}}
+
