@@ -58,7 +58,7 @@ get_org_ids.orgs_tbl <- function(data, verbose = TRUE, progress = TRUE){
     dplyr::arrange(otu_id)
 
   class(org_hits) <- c("orgs_id", class(org_hits))
-  attr(orgs_hits, "filtered") <- FALSE
+  attr(org_hits, "filtered") <- FALSE
   class(kegg_uncert) <- c("uncert_tbl", class(kegg_uncert))
 
   output <- list(orgs_id = org_hits, kegg_uncert = kegg_uncert)
