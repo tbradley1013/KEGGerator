@@ -26,7 +26,7 @@ get_enzymes.keggerator <- function(data, pathway_enzymes = NULL, kegg_enzymes = 
   if (is.null(data$orgs_id)) stop("orgs_id is NULL. Have you run get_orgs_id() yet?", call. = FALSE)
   if (!is_orgs_id(data$orgs_id)) stop("object in orgs_id slot is not of class orgs_id. Did you run get_orgs_id()?")
 
-  enzymes <- get_enzyme.orgs_id(data$orgs_id, pathway_enzymes = pathway_enzymes, kegg_enzymes = kegg_enzymes,
+  enzymes <- get_enzymes.orgs_id(data$orgs_id, pathway_enzymes = pathway_enzymes, kegg_enzymes = kegg_enzymes,
                                 verbose = verbose, progress = progress)
 
   data$orgs_enzymes <- enzymes
@@ -41,16 +41,16 @@ get_enzymes.keggerator <- function(data, pathway_enzymes = NULL, kegg_enzymes = 
 #' @export
 get_enzymes.orgs_id <- function(orgs_id, pathway_enzymes = NULL, kegg_enzymes = NULL, verbose = FALSE, progress = TRUE){
 
-  if (is.null(kegg_enzyme)){
-    kegg_enzyme <- KEGGerator::kegg_enzymes
+  if (is.null(kegg_enzymes)){
+    kegg_enzymes <- KEGGerator::kegg_enzymes
   } else{
-    if (!is_kegg_tbl(kegg_enzyme, "enzyme")){
+    if (!is_kegg_tbl(kegg_enzymes, "enzyme")){
       stop("kegg_enzyme must be a kegg_tbl with columns enzyme and enzyme_id", call. = FALSE)
     }
   }
 
   if (!is_filtered(orgs_id)){
-    warning("The orgs_id object provided has not been filtered, did you forget to run filter_orgs()?")
+    warning("The orgs_id object provided has not been filtered, did you forget to run filter_orgs()?", call. = FALSE)
   }
 
   if (progress){
@@ -58,7 +58,7 @@ get_enzymes.orgs_id <- function(orgs_id, pathway_enzymes = NULL, kegg_enzymes = 
   }
 
 
-  output <- data %>%
+  output <- orgs_id %>%
     dplyr::mutate(
       enzyme_id = purrr::map(genome_id, ~{
         id <- stringr::str_replace(.x, "gn:", "")
@@ -76,9 +76,9 @@ get_enzymes.orgs_id <- function(orgs_id, pathway_enzymes = NULL, kegg_enzymes = 
 
         if (verbose){
           if (!is.null(pathway_enzymes)){
-            cat("Linked ", crayon::red(n_hits), " (", crayon::red(n_remain),  " within the pathway specified) enzymes to genome: ", crayon::blue(.x), )
+            cat("Linked ", crayon::red(n_hits), " (", crayon::red(n_remain),  " within the pathway specified) enzymes to genome: ", crayon::blue(.x), "\n")
           } else {
-            cat("Linked ", crayon::red(n_hits), " enzymes to genome: ", crayon::blue(.x), )
+            cat("Linked ", crayon::red(n_hits), " enzymes to genome: ", crayon::blue(.x), "\n")
           }
 
         }
@@ -91,7 +91,7 @@ get_enzymes.orgs_id <- function(orgs_id, pathway_enzymes = NULL, kegg_enzymes = 
       })
     ) %>%
     tidyr::unnest(enzyme_id) %>%
-    dplyr::left_join(kegg_enzyme, by = "enzyme_id")
+    dplyr::left_join(kegg_enzymes, by = "enzyme_id")
 
 
   if (progress & verbose){
