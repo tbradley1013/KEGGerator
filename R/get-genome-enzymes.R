@@ -2,9 +2,14 @@
 #'
 #' @param data a tibble with genomes and genome_id or the output from `get_genome_id()`
 #' @param pathway_enzymes a vector of pathway enzymes
-#' @param kegg_enzyme a kegg_tbl that has the columns enzyme and enzyme_id. This
+#' @param kegg_enzymes a kegg_tbl that has the columns enzyme and enzyme_id. This
 #' can be generated using the get_kegg_enzyme() function. If NULL (default) than
 #' the KEGGerator::kegg_enzymes dataset will be used
+#' @param verbose logical; if TRUE the number of enzyme links for each genome
+#' id will be shown as they are processed
+#' @param progress logical; if TRUE (default) than a progress bar will appear if
+#' the query takes longer than 10 seconds (it likely will if your data has more)
+#' than only a few genomes
 #'
 #' @details if `pathway_enzymes` is NULL (default) than all enzymes for each genome
 #' will be returned. If a vector of enzyme_ids is provided than only the enzymes related
