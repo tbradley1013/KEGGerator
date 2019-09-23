@@ -29,6 +29,9 @@ get_enzymes.keggerator <- function(data, pathway_enzymes = NULL, kegg_enzymes = 
   enzymes <- get_enzyme.orgs_id(data$orgs_id, pathway_enzymes = pathway_enzymes, kegg_enzymes = kegg_enzymes,
                                 verbose = verbose, progress = progress)
 
+  data$orgs_enzymes <- enzymes
+
+  return(data)
 
 
 }
