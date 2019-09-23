@@ -48,7 +48,7 @@ get_org_ids.orgs_tbl <- function(data, verbose = TRUE, progress = TRUE){
   kegg_uncert <- org_hits %>%
     dplyr::group_by(genome) %>%
     dplyr::summarise(
-      n_hits = sum(!is.na(genome_query))
+      n_hits = sum(!is.na(genome_id))
     ) %>%
     dplyr::ungroup() %>%
     dplyr::mutate(
