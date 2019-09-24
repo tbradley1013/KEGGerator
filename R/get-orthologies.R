@@ -13,6 +13,16 @@
 #' that are related with the pathway of interest.
 #'
 #' @export
+get_orthologies <- function(data, pathway_orthologies, kegg_orthology, verbose, progress){
+  UseMethod("get_orthologies")
+}
+
+
+get_orthologies.orgs_id <- function(orgs_id, pathway_orthologies, kegg_orthology = NULL,
+                                    verbose = FALSE, progress = TRUE){
+
+}
+
 get_genome_orthologies <- function(data, pathway_orthologies = NULL, kegg_orthology = NULL){
   if (!"tbl_df" %in% class(data)) stop("data must be of class 'tbl_df'")
   if (!"genome_id" %in% colnames(data)) stop("data must have column named 'genome_id'")
