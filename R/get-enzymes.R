@@ -99,6 +99,10 @@ get_enzymes.orgs_id <- function(orgs_id, pathway_enzymes = NULL, kegg_enzymes = 
     dplyr::left_join(kegg_enzymes, by = "enzyme_id")
 
 
+  class(output) <- c("kegg_fun", class(output))
+  attr(output, "query") <- "enzymes"
+
+
   if (progress & verbose){
     p$stop()
   }
