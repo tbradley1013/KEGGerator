@@ -17,6 +17,8 @@ get_orthologies <- function(data, pathway_orthologies, kegg_orthology, verbose, 
   UseMethod("get_orthologies")
 }
 
+#' @describeIn get_orthologies method for keggerator objects
+#' @export
 get_orthologies.keggerator <- function(data, pathway_orthologies = NULL, kegg_orthology = NULL,
                                        verbose = FALSE, progress = TRUE){
   if (is.null(data$orgs_id)) stop("orgs_id is NULL. Have you run get_orgs_id() yet?", call. = FALSE)
@@ -32,6 +34,7 @@ get_orthologies.keggerator <- function(data, pathway_orthologies = NULL, kegg_or
 
 
 #' @describeIn get_orthologies method for orgs_id objects
+#' @export
 get_orthologies.orgs_id <- function(orgs_id, pathway_orthologies, kegg_orthology = NULL,
                                     verbose = FALSE, progress = TRUE){
 
