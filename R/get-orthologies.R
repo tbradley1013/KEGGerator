@@ -17,7 +17,21 @@ get_orthologies <- function(data, pathway_orthologies, kegg_orthology, verbose, 
   UseMethod("get_orthologies")
 }
 
+get_orthologies.keggerator <- function(data, pathway_orthologies = NULL, kegg_orthology = NULL,
+                                       verbose = FALSE, progress = TRUE){
+  if (is.null(data$orgs_id)) stop("orgs_id is NULL. Have you run get_orgs_id() yet?", call. = FALSE)
+  if (!is_orgs_id(data$orgs_id)) stop("object in orgs_id slot is not of class orgs_id. Did you run get_orgs_id()?")
 
+  orths <- get_orthologies.orgs_id(data$orgs_id, pathway_orthologies = pathway_orthologies,
+                                   kegg_orthology = kegg_orthology, verbose = verbose, progress = progress)
+
+  data$orgs_orthologies <- orths
+
+  return(data)
+}
+
+
+#' @describeIn get_orthologies method for orgs_id objects
 get_orthologies.orgs_id <- function(orgs_id, pathway_orthologies, kegg_orthology = NULL,
                                     verbose = FALSE, progress = TRUE){
 
@@ -84,35 +98,3 @@ get_orthologies.orgs_id <- function(orgs_id, pathway_orthologies, kegg_orthology
 
 }
 
-get_genome_orthologies <- function(data, pathway_orthologies = NULL, kegg_orthology = NULL){
-  if (!"tbl_df" %in% class(data)) stop("data must be of class 'tbl_df'")
-  if (!"genome_id" %in% colnames(data)) stop("data must have column named 'genome_id'")
-
-  if (is.null(kegg_orthology)){
-    kegg_orthology <- KEGGerator::kegg_orthologies
-  } else {
-    if (!is_kegg_tbl(kegg_orthology, "orthology")){
-      stop("kegg_orthology must be a kegg_tbl with columns orthology and orthology_id", call. = FALSE)
-    }
-  }
-
-  output <- data %>%
-    dplyr::mutate(
-      orthology_id = purrr::map(genome_id, ~{
-        id <- stringr::str_replace(.x, "gn:", "")
-
-        orths <- kegg_link_safe("orthology", id) %>%
-          unique()
-
-        if (!is.null(pathway_orthologies)) {
-          orths <- orths[orths %in% pathway_orthologies]
-        }
-
-        return(orths)
-      })
-    ) %>%
-    tidyr::unnest(orthology_id) %>%
-    dplyr::left_join(kegg_orthology, by = "orthology_id")
-
-  return(output)
-}
