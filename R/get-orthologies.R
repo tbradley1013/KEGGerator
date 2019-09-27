@@ -5,6 +5,11 @@
 #' @param kegg_orthology a kegg_tbl with the columns orthology and orthology_id
 #' which can be generated with the get_kegg_orthology function. If NULL (default)
 #' the KEGGerator::kegg_orthologies dataset will be used
+#' @param verbose logical; if TRUE the number of enzyme links for each genome
+#' id will be shown as they are processed
+#' @param progress logical; if TRUE (default) than a progress bar will appear if
+#' the query takes longer than 10 seconds (it likely will if your data has more)
+#' than only a few genomes
 #'
 #' @details if `pathway_orthologies` is NULL (default) than all orthologies for each genome
 #' will be returned. If a vector of orthology_ids is provided than only the orthologies related
