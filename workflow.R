@@ -12,9 +12,9 @@ library(tidyverse)
 
 ps <- readr::read_rds("../WWTP_Impact_on_Stream/data/ps_orig.RDS")
 
-# ps <- subset_taxa(ps, !is.na(Species))
+ps <- phyloseq::subset_taxa(ps, !is.na(Species))
 
-ps <- filter_taxa(ps, function(x)sum(x)>1000, prune = TRUE)
+ps <- phyloseq::filter_taxa(ps, function(x)sum(x)>500, prune = TRUE)
 
 # gerenate a
 ps_kegg <- as_keggerator(ps)
@@ -26,8 +26,16 @@ ps_kegg <- orgs_tibble(ps_kegg)
 # get org ids inside keggerator object
 ps_kegg <- get_org_ids(ps_kegg)
 
+# ps_kegg <- filter_orgs()
+
+ps_kegg <- get_enzymes(ps_kegg, verbose = TRUE)
+
+ps_kegg <- get_orthologies(ps_kegg)
 
 
+nit_enzymes <- get_pathway_enzymes("Nitrogen metabolism")
 
+nit_orths <- get_pathway_orthologies("Nitrogen metabolism")
+nit_mods <- get_pathway_modules("Nitrogen metabolism")
 
 
