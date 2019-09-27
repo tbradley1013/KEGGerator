@@ -59,7 +59,7 @@ get_orthologies.orgs_id <- function(orgs_id, pathway_orthologies, kegg_orthology
     p <- dplyr::progress_estimated(nrow(orgs_id), 10)
   }
 
-  output <- data %>%
+  output <- orgs_id %>%
     dplyr::mutate(
       orthology_id = purrr::map(genome_id, ~{
         id <- stringr::str_replace(.x, "gn:", "")
