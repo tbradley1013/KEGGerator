@@ -44,8 +44,7 @@ keggerator <- function(tax_tbl = NULL, otu_tbl = NULL, sam_tbl = NULL,
       "total_uncert" = total_uncert,
       "orgs_filt" = orgs_filt,
       "orgs_enzymes" = orgs_enzymes,
-      "orgs_orthologies" = orgs_orthologies,
-      "orgs_genes" = orgs_genes
+      "orgs_orthologies" = orgs_orthologies
     ),
     class = "keggerator"
   )
