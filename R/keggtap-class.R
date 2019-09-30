@@ -36,11 +36,22 @@ keggtap <- function(pathway, match_strict = FALSE, kegg_enzyme = NULL, kegg_orth
     stop("There are no pathways that match your search", call. = FALSE)
   }
 
+  pathway_enzymes <- link_paths(pathways$pathway_id, "enzyme", kegg_enzyme)
+  pathway_orthology <- link_paths(pathways$pathway_id, "orthology", kegg_orthology)
+
+  out <- structure(
+    list(
+      pathway = pathway,
+      enzyme = pathway_enzymes,
+      orthology = pathway_orthology
+    )
+  )
+
 
 }
 
 
-link_paths <- function(path_id, type, kegg_enzyme, kegg_orthology){
+link_paths <- function(path_id, type, kegg_tbl){
 
   out <- purrr::map_dfr(path_id, ~{
     path <- stringr::str_replace(.x, "path:", "")
@@ -57,6 +68,11 @@ link_paths <- function(path_id, type, kegg_enzyme, kegg_orthology){
         pathway_id = names(links),
         orthology_id = links
       )
+    } else if (type == "module"){
+      out <- tibble::tibble(
+        pathway_id = names(links),
+        module_id = links
+      )
     }
 
     return(out)
@@ -65,10 +81,13 @@ link_paths <- function(path_id, type, kegg_enzyme, kegg_orthology){
 
   if (type == "enzyme"){
     out <- out %>%
-      dplyr::left_join(kegg_enzyme, by = "enzyme_id")
+      dplyr::left_join(kegg_tbl, by = "enzyme_id")
   } else if (type == "orthology"){
     out <- out %>%
-      dplyr::left_join(kegg_orthology, by = "orthology_id")
+      dplyr::left_join(kegg_tbl, by = "orthology_id")
+  } else if (type == "module"){
+    out <- out %>%
+      dplyr::left_join(kegg_tbl, by = "module_id")
   }
 
   return(out)
