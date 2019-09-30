@@ -46,8 +46,8 @@ get_orthologies.orgs_id <- function(orgs_id, pathway_orthologies, kegg_orthology
   if (is.null(kegg_orthology)){
     kegg_orthology <- KEGGerator::kegg_orthologies
   } else{
-    if (!is_kegg_tbl(kegg_orthology, "enzyme")){
-      stop("kegg_enzyme must be a kegg_tbl with columns enzyme and enzyme_id", call. = FALSE)
+    if (!is_kegg_tbl(kegg_orthology, "orthology")){
+      stop("kegg_enzyme must be a kegg_tbl with columns orthology and orthology_id", call. = FALSE)
     }
   }
 
