@@ -20,17 +20,57 @@ keggtap <- function(pathway, match_strict = FALSE, kegg_enzyme = NULL, kegg_orth
     kegg_pathway <- KEGGerator::kegg_pathways
   } else {
     if (!is_kegg_tbl(kegg_pathway, "pathway")){
-      stop()
+      stop("kegg_pathway must be a kegg_tbl with columns pathway and pathway_id", call. = FALSE)
     }
   }
 
   if (!match_strict){
     pathway_match <- paste(tolower(pathway), collapse = "|")
-    pathways <- KEGGerator::kegg_pathways[stringr::str_detect(KEGGerator::kegg_pathways$pathway, pathway_match), ]
+    pathways <- kegg_pathway[stringr::str_detect(tolower(kegg_pathway$pathway), pathway_match), ]
   } else {
     pathway_match <- tolower(pathway)
-    pathways <- KEGGerator::kegg_pathways[KEGGerator::kegg_pathways]
+    pathways <- kegg_pathway[tolower(kegg_pathway$pathway) %in% pathway_match, ]
+  }
+
+  if (nrow(pathways) == 0){
+    stop("There are no pathways that match your search", call. = FALSE)
   }
 
 
 }
+
+
+link_paths <- function(path_id, type, kegg_enzyme, kegg_orthology){
+
+  out <- purrr::map_dfr(path_id, ~{
+    path <- stringr::str_replace(.x, "path:", "")
+
+    links <- kegg_link_safe(type, path)
+
+    if (type == "enzyme"){
+      out <- tibble::tibble(
+        pathway_id = names(links),
+        enzyme_id = links
+      )
+    } else if (type == "orthology"){
+      out <- tibble::tibble(
+        pathway_id = names(links),
+        orthology_id = links
+      )
+    }
+
+    return(out)
+  })
+
+
+  if (type == "enzyme"){
+    out <- out %>%
+      dplyr::left_join(kegg_enzyme, by = "enzyme_id")
+  } else if (type == "orthology"){
+    out <- out %>%
+      dplyr::left_join(kegg_orthology, by = "orthology_id")
+  }
+
+  return(out)
+}
+
