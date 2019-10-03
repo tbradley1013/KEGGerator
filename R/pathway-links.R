@@ -158,5 +158,9 @@ filter_pathway <- function(kegg_pathway, pathway_name, strict){
     out <- dplyr::filter(kegg_pathway, stringr::str_detect(tolower(pathway), pathway_name))
   }
 
+  if (nrow(out) == 0){
+    stop("There are no pathways that match your search", call. = FALSE)
+  }
+
   return(out)
 }
