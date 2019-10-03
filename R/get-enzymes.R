@@ -58,10 +58,6 @@ get_enzymes.orgs_id <- function(orgs_id, pathway_enzymes = NULL, kegg_enzymes = 
     warning("The orgs_id object provided has not been filtered, did you forget to run filter_orgs()?", call. = FALSE)
   }
 
-  if (progress){
-    p <- dplyr::progress_estimated(nrow(orgs_id), 10)
-  }
-
   if (is.null(pathway_enzymes)){
     path_enzymes <- NULL
   } else if (is_keggtap(pathway_enzymes)){
@@ -76,6 +72,10 @@ get_enzymes.orgs_id <- function(orgs_id, pathway_enzymes = NULL, kegg_enzymes = 
     path_enzymes <- pathway_enzymes
   }
 
+
+  if (progress){
+    p <- dplyr::progress_estimated(nrow(orgs_id), 10)
+  }
 
   output <- orgs_id %>%
     dplyr::mutate(
@@ -94,7 +94,7 @@ get_enzymes.orgs_id <- function(orgs_id, pathway_enzymes = NULL, kegg_enzymes = 
         n_remain <- length(enzymes)
 
         if (verbose){
-          if (!is.null(pathway_enzymes)){
+          if (!is.null(path_enzymes)){
             cat("Linked ", crayon::red(n_hits), " (", crayon::red(n_remain),  " within the pathway specified) enzymes to genome: ", crayon::blue(.x), "\n")
           } else {
             cat("Linked ", crayon::red(n_hits), " enzymes to genome: ", crayon::blue(.x), "\n")
