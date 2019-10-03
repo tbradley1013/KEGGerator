@@ -34,45 +34,4 @@ keggtap <- function(pathway_name, match_strict = FALSE, kegg_enzyme = NULL,
 }
 
 
-link_paths <- function(path_id, type, kegg_tbl){
-
-  out <- purrr::map_dfr(path_id, ~{
-    path <- stringr::str_replace(.x, "path:", "")
-
-    links <- kegg_link_safe(type, path)
-
-    if (type == "enzyme"){
-      out <- tibble::tibble(
-        pathway_id = names(links),
-        enzyme_id = links
-      )
-    } else if (type == "orthology"){
-      out <- tibble::tibble(
-        pathway_id = names(links),
-        orthology_id = links
-      )
-    } else if (type == "module"){
-      out <- tibble::tibble(
-        pathway_id = names(links),
-        module_id = links
-      )
-    }
-
-    return(out)
-  })
-
-
-  if (type == "enzyme"){
-    out <- out %>%
-      dplyr::left_join(kegg_tbl, by = "enzyme_id")
-  } else if (type == "orthology"){
-    out <- out %>%
-      dplyr::left_join(kegg_tbl, by = "orthology_id")
-  } else if (type == "module"){
-    out <- out %>%
-      dplyr::left_join(kegg_tbl, by = "module_id")
-  }
-
-  return(out)
-}
 
