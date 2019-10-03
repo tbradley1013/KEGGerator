@@ -145,6 +145,10 @@ get_pathway_orthologies <- function(pathway_name, kegg_orthology = NULL, kegg_pa
 
 
 filter_pathway <- function(kegg_pathway, pathway_name, strict){
+  if (!is_kegg_tbl(kegg_pathway, "pathway")){
+    stop("kegg_pathway must be a kegg_tbl with columns pathway and pathway_id", call. = FALSE)
+  }
+
   if (strict){
     out <- dplyr::filter(kegg_pathway, pathway %in% pathway_name)
   } else {
