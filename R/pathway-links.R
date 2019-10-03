@@ -8,7 +8,7 @@
 #' column in the kegg_pathways dataset
 #'
 #' @export
-get_pathway_modules <- function(pathway_name, kegg_module = NULL, kegg_pathway = NULL) {
+get_pathway_modules <- function(pathway_name, kegg_module = NULL, kegg_pathway = NULL, strict = FALSE) {
   if (is.null(kegg_pathway)){
     kegg_pathway <- KEGGerator::kegg_pathways
   } else {
@@ -26,7 +26,8 @@ get_pathway_modules <- function(pathway_name, kegg_module = NULL, kegg_pathway =
   }
 
   pathway <- kegg_pathway %>%
-    dplyr::filter(stringr::str_detect(pathway, pathway_name)) %>%
+    filter_pathway(pathway_name, strict = strict) %>%
+    # dplyr::filter(stringr::str_detect(pathway, pathway_name)) %>%
     dplyr::mutate(
       module = purrr::map(pathway_id, ~{
         mods <- KEGGREST::keggLink("module", .x)
@@ -59,7 +60,7 @@ get_pathway_modules <- function(pathway_name, kegg_module = NULL, kegg_pathway =
 #' column in the kegg_pathways dataset
 #'
 #' @export
-get_pathway_enzymes <- function(pathway_name, kegg_enzyme = NULL, kegg_pathway = NULL) {
+get_pathway_enzymes <- function(pathway_name, kegg_enzyme = NULL, kegg_pathway = NULL, strict = FALSE) {
   if (is.null(kegg_pathway)){
     kegg_pathway <- KEGGerator::kegg_pathways
   } else {
@@ -75,7 +76,8 @@ get_pathway_enzymes <- function(pathway_name, kegg_enzyme = NULL, kegg_pathway =
   }
 
   pathway <- kegg_pathway %>%
-    dplyr::filter(stringr::str_detect(pathway, pathway_name)) %>%
+    filter_pathway(pathway_name, strict = strict) %>%
+    # dplyr::filter(stringr::str_detect(pathway, pathway_name)) %>%
     dplyr::mutate(
       enzyme = purrr::map(pathway_id, ~{
         enzymes <- KEGGREST::keggLink("enzyme", .x)
@@ -103,7 +105,7 @@ get_pathway_enzymes <- function(pathway_name, kegg_enzyme = NULL, kegg_pathway =
 #' column in the kegg_pathways dataset
 #'
 #' @export
-get_pathway_orthologies <- function(pathway_name, kegg_orthology = NULL, kegg_pathway = NULL){
+get_pathway_orthologies <- function(pathway_name, kegg_orthology = NULL, kegg_pathway = NULL, strict = FALSE){
   if (is.null(kegg_pathway)){
     kegg_pathway <- KEGGerator::kegg_pathways
   } else {
@@ -122,7 +124,8 @@ get_pathway_orthologies <- function(pathway_name, kegg_orthology = NULL, kegg_pa
 
 
   pathway <- kegg_pathway %>%
-    dplyr::filter(stringr::str_detect(pathway, pathway_name)) %>%
+    filter_pathway(pathway_name, strict = strict) %>%
+    # dplyr::filter(stringr::str_detect(pathway, pathway_name)) %>%
     dplyr::mutate(
       orthology = purrr::map(pathway_id, ~{
         orth <- KEGGREST::keggLink("orthology", .x)
@@ -138,4 +141,16 @@ get_pathway_orthologies <- function(pathway_name, kegg_orthology = NULL, kegg_pa
     tidyr::unnest(orthology)
 
   return(pathway)
+}
+
+
+filter_pathway <- function(kegg_pathway, pathway_name, strict){
+  if (strict){
+    out <- dplyr::filter(kegg_pathway, pathway %in% pathway_name)
+  } else {
+    if (length(pathway_name) > 1) pathway_name <- paste(pathway_name, collapse = "|")
+    out <- dplyr::filter(kegg_pathway, stringr::str_detect(pathway, pathway_name))
+  }
+
+  return(out)
 }
