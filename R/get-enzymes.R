@@ -62,6 +62,20 @@ get_enzymes.orgs_id <- function(orgs_id, pathway_enzymes = NULL, kegg_enzymes = 
     p <- dplyr::progress_estimated(nrow(orgs_id), 10)
   }
 
+  if (is.null(pathway_enzymes)){
+    path_enzymes <- NULL
+  } else if (is_keggtap(pathway_enzymes)){
+    path_enzymes <- pathway_enzymes$enzyme$enzyme_id
+  } else if (tibble::is_tibble(pathway_enzymes) | is.data.frame(pathway_enzymes)){
+    if (!"enzyme_id" %in% colnames(pathway_enzymes)){
+      stop("if pathway_enzymes is a tbl_df than it must have a column named enzyme_id")
+    }
+
+    path_enzymes <- pathway_enzymes$enzyme_id
+  } else {
+    path_enzymes <- pathway_enzymes
+  }
+
 
   output <- orgs_id %>%
     dplyr::mutate(
@@ -73,8 +87,8 @@ get_enzymes.orgs_id <- function(orgs_id, pathway_enzymes = NULL, kegg_enzymes = 
 
         n_hits <- length(enzymes)
 
-        if (!is.null(pathway_enzymes)) {
-          enzymes <- enzymes[enzymes %in% pathway_enzymes]
+        if (!is.null(path_enzymes)) {
+          enzymes <- enzymes[enzymes %in% path_enzymes]
         }
 
         n_remain <- length(enzymes)
