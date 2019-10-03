@@ -28,7 +28,7 @@ keggtap <- function(pathway_name, kegg_enzyme = NULL,
 
   out <- structure(
     list(
-      pathway = pathway,
+      pathway = pathway_name,
       enzyme = pathway_enzymes,
       orthology = pathway_orthology,
       module = pathway_modules
