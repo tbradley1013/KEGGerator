@@ -1,6 +1,23 @@
 # function to create keggtap object
 
 #' Create a keggtap object
+#'
+#' @param pathway_name a character or character vector that specifies the path or
+#' paths that you are interested in
+#' @param kegg_enzyme a kegg_tbl generated from the get_kegg_enzymes function. If
+#' NULL (default) the kegg_enzymes dataset in this package will be used
+#' @param kegg_orthology a kegg_tbl generated from the get_kegg_orthology function.
+#' If NULL (default) the kegg_orthologies dataset in this package will be used.
+#' @param kegg_module a kegg_tbl generated from the get_kegg_module function.
+#' If NULL (default) the kegg_modules dataset in this package will be used
+#' @param kegg_pathway a kegg_tbl generated from the get_kegg_pathway function.
+#' If NULL (default) the kegg_pathways function will be used.
+#' @param strict whether strict matching should be used when matching the pathway_name
+#' provided to the pathways in the kegg_pathway dataset. If FALSE (default), regex will
+#' be used to match pathways to the provided options. If TRUE, the provided pathways
+#' will have to be the same as they are in the dataset (case insensitive)
+#'
+#' @export
 keggtap <- function(pathway_name, kegg_enzyme = NULL,
                     kegg_orthology = NULL, kegg_module = NULL,
                     kegg_pathway = NULL, strict = FALSE){
@@ -36,7 +53,7 @@ keggtap <- function(pathway_name, kegg_enzyme = NULL,
 }
 
 
-
+#' @export
 is_keggtap <- function(x){
   inherits(x, "keggtap")
 }
