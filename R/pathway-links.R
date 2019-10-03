@@ -8,8 +8,24 @@
 #' column in the kegg_pathways dataset
 #'
 #' @export
-get_pathway_modules <- function(pathway_name) {
-  pathway <- kegg_pathways %>%
+get_pathway_modules <- function(pathway_name, kegg_module = NULL, kegg_pathway = NULL) {
+  if (is.null(kegg_pathway)){
+    kegg_pathway <- KEGGerator::kegg_pathways
+  } else {
+    if (!is_kegg_tbl(kegg_pathway, "pathway")){
+      stop("kegg_pathway must be a kegg_tbl with columns pathway and pathway_id", call. = FALSE)
+    }
+  }
+
+  if (is.null(kegg_module)){
+    kegg_module <- KEGGerator::kegg_modules
+  } else {
+    if (!is_kegg_tbl(kegg_module, "module")){
+      stop("kegg_module must be a kegg_tbl with columns module and module_id", call. = FALSE)
+    }
+  }
+
+  pathway <- kegg_pathway %>%
     dplyr::filter(stringr::str_detect(pathway, pathway_name)) %>%
     dplyr::mutate(
       module = purrr::map(pathway_id, ~{
@@ -18,7 +34,7 @@ get_pathway_modules <- function(pathway_name) {
         output <- tibble::tibble(
           module_id = mods
         ) %>%
-          dplyr::left_join(kegg_modules, by = "module_id")
+          dplyr::left_join(kegg_module, by = "module_id")
 
         return(output)
       })
@@ -43,8 +59,22 @@ get_pathway_modules <- function(pathway_name) {
 #' column in the kegg_pathways dataset
 #'
 #' @export
-get_pathway_enzymes <- function(pathway_name) {
-  pathway <- kegg_pathways %>%
+get_pathway_enzymes <- function(pathway_name, kegg_enzyme = NULL, kegg_pathway = NULL) {
+  if (is.null(kegg_pathway)){
+    kegg_pathway <- KEGGerator::kegg_pathways
+  } else {
+    if (!is_kegg_tbl(kegg_pathway, "pathway")){
+      stop("kegg_pathway must be a kegg_tbl with columns pathway and pathway_id", call. = FALSE)
+    }
+  }
+
+  if (is.null(kegg_enzyme)){
+    kegg_enzyme <- KEGGerator::kegg_enzymes
+  } else if (!is_kegg_tbl(kegg_enzyme, "enzyme")){
+    stop("kegg_enzyme must be a kegg_tbl with columns enzyme and enzyme_id", call. = FALSE)
+  }
+
+  pathway <- kegg_pathway %>%
     dplyr::filter(stringr::str_detect(pathway, pathway_name)) %>%
     dplyr::mutate(
       enzyme = purrr::map(pathway_id, ~{
@@ -53,7 +83,7 @@ get_pathway_enzymes <- function(pathway_name) {
         output <- tibble::tibble(
           enzyme_id = enzymes
         ) %>%
-          dplyr::left_join(kegg_enzymes, by = "enzyme_id")
+          dplyr::left_join(kegg_enzyme, by = "enzyme_id")
 
         return(output)
       })
@@ -73,8 +103,25 @@ get_pathway_enzymes <- function(pathway_name) {
 #' column in the kegg_pathways dataset
 #'
 #' @export
-get_pathway_orthologies <- function(pathway_name){
-  pathway <- kegg_pathways %>%
+get_pathway_orthologies <- function(pathway_name, kegg_orthology = NULL, kegg_pathway = NULL){
+  if (is.null(kegg_pathway)){
+    kegg_pathway <- KEGGerator::kegg_pathways
+  } else {
+    if (!is_kegg_tbl(kegg_pathway, "pathway")){
+      stop("kegg_pathway must be a kegg_tbl with columns pathway and pathway_id", call. = FALSE)
+    }
+  }
+
+  if (is.null(kegg_orthology)){
+    kegg_orthology <- KEGGerator::kegg_orthologies
+  } else{
+    if (!is_kegg_tbl(kegg_orthology, "orthology")){
+      stop("kegg_orthology must be a kegg_tbl with columns orthology and orthology_id", call. = FALSE)
+    }
+  }
+
+
+  pathway <- kegg_pathway %>%
     dplyr::filter(stringr::str_detect(pathway, pathway_name)) %>%
     dplyr::mutate(
       orthology = purrr::map(pathway_id, ~{
@@ -83,7 +130,7 @@ get_pathway_orthologies <- function(pathway_name){
         output <- tibble::tibble(
           orthology_id = orth
         ) %>%
-          dplyr::left_join(kegg_orthologies, by = "orthology_id")
+          dplyr::left_join(kegg_orthology, by = "orthology_id")
 
         return(output)
       })
