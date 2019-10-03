@@ -2,7 +2,8 @@
 
 
 keggtap <- function(pathway_name, match_strict = FALSE, kegg_enzyme = NULL,
-                    kegg_orthology = NULL, kegg_module = NULL, kegg_pathway = NULL){
+                    kegg_orthology = NULL, kegg_module = NULL,
+                    kegg_pathway = NULL, strict = FALSE){
 
   if (!match_strict){
     pathway_match <- paste(tolower(pathway), collapse = "|")
@@ -16,15 +17,16 @@ keggtap <- function(pathway_name, match_strict = FALSE, kegg_enzyme = NULL,
     stop("There are no pathways that match your search", call. = FALSE)
   }
 
-  pathway_enzymes <- get_pathway_enzymes(pathway_name, kegg_enzyme = kegg_enzyme, kegg_pathway = kegg_pathway)
-  pathway_orthology <- get_pathway_orthologies(pathway_name, kegg_orthology = kegg_orthology, kegg_pathway = kegg_pathway)
-  pathway_modules <- get_pathway_modules(pathway_name, kegg_module = kegg_module, kegg_pathway = kegg_pathway)
+  pathway_enzymes <- get_pathway_enzymes(pathway_name, kegg_enzyme = kegg_enzyme, kegg_pathway = kegg_pathway, strict = strict)
+  pathway_orthology <- get_pathway_orthologies(pathway_name, kegg_orthology = kegg_orthology, kegg_pathway = kegg_pathway, strict = strict)
+  pathway_modules <- get_pathway_modules(pathway_name, kegg_module = kegg_module, kegg_pathway = kegg_pathway, strict = strict)
 
   out <- structure(
     list(
       pathway = pathway,
       enzyme = pathway_enzymes,
-      orthology = pathway_orthology
+      orthology = pathway_orthology,
+      module = pathway_modules
     )
   )
 
