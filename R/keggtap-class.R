@@ -37,3 +37,6 @@ keggtap <- function(pathway_name, kegg_enzyme = NULL,
 
 
 
+is_keggtap <- function(x){
+  inherits(x, "keggtap")
+}
