@@ -40,7 +40,7 @@ get_orthologies.keggerator <- function(data, pathway_orthologies = NULL, kegg_or
 
 #' @describeIn get_orthologies method for orgs_id objects
 #' @export
-get_orthologies.orgs_id <- function(orgs_id, pathway_orthologies, kegg_orthology = NULL,
+get_orthologies.orgs_id <- function(orgs_id, pathway_orthologies = NULL, kegg_orthology = NULL,
                                     verbose = FALSE, progress = TRUE){
 
   if (is.null(kegg_orthology)){
@@ -53,6 +53,20 @@ get_orthologies.orgs_id <- function(orgs_id, pathway_orthologies, kegg_orthology
 
   if (!is_filtered(orgs_id)){
     warning("The orgs_id object provided has not been filtered, did you forget to run filter_orgs()?", call. = FALSE)
+  }
+
+  if (is.null(pathway_orthologies)){
+    path_orthology <- NULL
+  } else if (is_keggtap(pathway_orthologies)){
+    path_orthology <- pathway_orthologies$orthology$orthology_id
+  } else if (tibble::is_tibble(pathway_orthologies) | is.data.frame(pathway_orthologies)){
+    if (!"orthology_id" %in% colnames(pathway_orthologies)){
+      stop("if pathway_orthologies is a tbl_df than it must have a column named enzyme_id")
+    }
+
+    path_orthology <- pathway_orthologies$enzyme_id
+  } else {
+    path_orthology <- pathway_orthologies
   }
 
   if (progress){
@@ -69,14 +83,14 @@ get_orthologies.orgs_id <- function(orgs_id, pathway_orthologies, kegg_orthology
 
         n_hits <- length(orths)
 
-        if (!is.null(pathway_orthologies)) {
-          orths <- orths[orths %in% pathway_orthologies]
+        if (!is.null(path_orthology)) {
+          orths <- orths[orths %in% path_orthology]
         }
 
         n_remain <- length(orths)
 
         if (verbose){
-          if (!is.null(pathway_orthologies)){
+          if (!is.null(path_orthology)){
             cat("Linked ", crayon::red(n_hits), " (", crayon::red(n_remain),  " within the pathway specified) orthologies to genome: ", crayon::blue(.x), "\n")
           } else {
             cat("Linked ", crayon::red(n_hits), " orthologies to genome: ", crayon::blue(.x), "\n")
