@@ -149,11 +149,13 @@ filter_pathway <- function(kegg_pathway, pathway_name, strict){
     stop("kegg_pathway must be a kegg_tbl with columns pathway and pathway_id", call. = FALSE)
   }
 
+  pathway_name <- tolower(pathway_name)
+
   if (strict){
-    out <- dplyr::filter(kegg_pathway, pathway %in% pathway_name)
+    out <- dplyr::filter(kegg_pathway, tolower(pathway) %in% pathway_name)
   } else {
     if (length(pathway_name) > 1) pathway_name <- paste(pathway_name, collapse = "|")
-    out <- dplyr::filter(kegg_pathway, stringr::str_detect(pathway, pathway_name))
+    out <- dplyr::filter(kegg_pathway, stringr::str_detect(tolower(pathway), pathway_name))
   }
 
   return(out)
