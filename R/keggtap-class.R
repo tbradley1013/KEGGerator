@@ -1,7 +1,7 @@
 # function to create keggtap object
 
-
-keggtap <- function(pathway_name, match_strict = FALSE, kegg_enzyme = NULL,
+#' Create a keggtap object
+keggtap <- function(pathway_name, kegg_enzyme = NULL,
                     kegg_orthology = NULL, kegg_module = NULL,
                     kegg_pathway = NULL, strict = FALSE){
 
@@ -27,9 +27,11 @@ keggtap <- function(pathway_name, match_strict = FALSE, kegg_enzyme = NULL,
       enzyme = pathway_enzymes,
       orthology = pathway_orthology,
       module = pathway_modules
-    )
+    ),
+    class = "keggtap"
   )
 
+  return(out)
 
 }
 
