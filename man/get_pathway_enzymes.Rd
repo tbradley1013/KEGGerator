@@ -4,7 +4,8 @@
 \alias{get_pathway_enzymes}
 \title{Query all enzymes associated with a given pathway}
 \usage{
-get_pathway_enzymes(pathway_name)
+get_pathway_enzymes(pathway_name, kegg_enzyme = NULL,
+  kegg_pathway = NULL, strict = FALSE)
 }
 \arguments{
 \item{pathway_name}{a character string specifying a certain pathway. Regular

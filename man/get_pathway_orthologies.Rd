@@ -4,7 +4,8 @@
 \alias{get_pathway_orthologies}
 \title{Query all orthologies associated with a given pathway}
 \usage{
-get_pathway_orthologies(pathway_name)
+get_pathway_orthologies(pathway_name, kegg_orthology = NULL,
+  kegg_pathway = NULL, strict = FALSE)
 }
 \arguments{
 \item{pathway_name}{a character string specifying a certain pathway. Regular

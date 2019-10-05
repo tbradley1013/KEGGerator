@@ -4,7 +4,8 @@
 \alias{get_pathway_modules}
 \title{Query all modules associated with a given pathway}
 \usage{
-get_pathway_modules(pathway_name)
+get_pathway_modules(pathway_name, kegg_module = NULL,
+  kegg_pathway = NULL, strict = FALSE)
 }
 \arguments{
 \item{pathway_name}{a character string specifying a certain pathway. Regular
