@@ -10,28 +10,31 @@ library(phyloseq)
 library(KEGGerator)
 library(tidyverse)
 
-ps <- readr::read_rds("../WWTP_Impact_on_Stream/data/ps_orig.RDS")
+# ps <- readr::read_rds("../WWTP_Impact_on_Stream/data/ps_orig.RDS")
+#
+# ps <- phyloseq::subset_taxa(ps, !is.na(Species))
+#
+# ps <- phyloseq::filter_taxa(ps, function(x)sum(x)>500, prune = TRUE)
+#
+# # gerenate a
+# ps_kegg <- as_keggerator(ps)
+#
+# ps_kegg <- orgs_tibble(ps_kegg)
+#
+# # orgs_id <- get_org_ids(ps_kegg$orgs_tbl)
+#
+# # get org ids inside keggerator object
+# ps_kegg <- get_org_ids(ps_kegg)
+#
+# # ps_kegg <- filter_orgs()
+#
+# ps_kegg <- get_enzymes(ps_kegg)
+#
+# ps_kegg <- get_orthologies(ps_kegg)
+#
+# write_rds(ps_kegg, "workflow-keggerator.rds", compress = "xz", compression = 9L)
 
-ps <- phyloseq::subset_taxa(ps, !is.na(Species))
-
-ps <- phyloseq::filter_taxa(ps, function(x)sum(x)>500, prune = TRUE)
-
-# gerenate a
-ps_kegg <- as_keggerator(ps)
-
-ps_kegg <- orgs_tibble(ps_kegg)
-
-# orgs_id <- get_org_ids(ps_kegg$orgs_tbl)
-
-# get org ids inside keggerator object
-ps_kegg <- get_org_ids(ps_kegg)
-
-# ps_kegg <- filter_orgs()
-
-ps_kegg <- get_enzymes(ps_kegg, verbose = TRUE)
-
-ps_kegg <- get_orthologies(ps_kegg)
-
+ps_kegg <- read_rds("workflow-keggerator.rds")
 
 nit_enzymes <- get_pathway_enzymes("Nitrogen metabolism")
 
