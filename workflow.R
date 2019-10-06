@@ -51,4 +51,11 @@ ps_kegg$orgs_tbl %>%
   ungroup() %>%
   left_join(ps_kegg$total_uncert %>%
               select(otu_id, total_kegg_hits),
-            by = "otu_id")
+            by = "otu_id") %>%
+  mutate(
+    pan = n_ko/total_kegg_hits
+  )
+
+
+
+
