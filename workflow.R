@@ -42,3 +42,13 @@ nit_orths <- get_pathway_orthologies("Nitrogen metabolism")
 nit_mods <- get_pathway_modules("Nitrogen metabolism")
 
 
+
+ps_kegg$orgs_tbl %>%
+  left_join(ps_kegg$orgs_orthologies, by = "genome") %>%
+  filter(!is.na(genome_id)) %>%
+  group_by(otu_id, orthology_id) %>%
+  summarize(n_ko = n()) %>%
+  ungroup() %>%
+  left_join(ps_kegg$total_uncert %>%
+              select(otu_id, total_kegg_hits),
+            by = "otu_id")
