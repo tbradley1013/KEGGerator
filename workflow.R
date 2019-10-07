@@ -57,5 +57,7 @@ ps_kegg$orgs_tbl %>%
   )
 
 
+ps_kegg$otu_tbl %>% mutate_if(is.numeric, list(~./sum(.)))
+
 
 
