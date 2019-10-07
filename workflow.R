@@ -43,7 +43,7 @@ nit_mods <- get_pathway_modules("Nitrogen metabolism")
 
 
 
-ps_kegg$orgs_tbl %>%
+pan_ko <- ps_kegg$orgs_tbl %>%
   left_join(ps_kegg$orgs_orthologies, by = "genome") %>%
   filter(!is.na(genome_id)) %>%
   group_by(otu_id, orthology_id) %>%
@@ -56,8 +56,37 @@ ps_kegg$orgs_tbl %>%
     pan = n_ko/total_kegg_hits
   )
 
+orgs_prob <- ps_kegg$total_uncert %>%
+  mutate(prob = ifelse(n_spec >= total_kegg_hits, 1/n_spec, 1/total_kegg_hits)) %>%
+  select(otu_id, prob) %>%
+  left_join(pan_ko, by = "otu_id") %>%
+  filter(!is.na(pan), !is.na(prob)) %>%
+  mutate(overall_prob = prob*pan) %>%
+  select(otu_id, orthology_id, overall_prob)
 
-ps_kegg$otu_tbl %>% mutate_if(is.numeric, list(~./sum(.)))
+ps_kegg$otu_tbl %>% mutate_at(vars(-c(otu_id, otu)), list(~./sum(.)))
 
 
 
+# ps_kegg$orgs_tbl %>%
+#   left_join(ps_kegg$otu_tbl, by = "otu_id") %>%
+#   gather(key = sample, value = count, -c(otu_id, genome, otu)) %>%
+#   group_by(genome) %>%
+#   mutate(count = count/median(count)) %>%
+#   ungroup() %>%
+#   group_by(sample) %>%
+#   mutate(count = count/sum(count)) %>%
+#   ungroup() %>%
+#   spread(key = sample, value = count) %>%
+#   select(-genome) %>%
+#   distinct()
+
+
+
+ps_kegg$orgs_tbl %>%
+  left_join(ps_kegg$otu_tbl, by = "otu_id") %>%
+  mutate_at(vars(-c(otu_id, otu, genome)), list(~./sum(.))) %>%
+  inner_join(orgs_prob, by = "otu_id") %>%
+  mutate_at(vars(-c(otu_id, genome, otu, orthology_id, overall_prob)), list(~.*overall_prob)) %>%
+  group_by(orthology_id) %>%
+  summarize_at(vars(-c(otu_id, genome, otu, overall_prob)), sum)
