@@ -87,6 +87,6 @@ ps_kegg$orgs_tbl %>%
   left_join(ps_kegg$otu_tbl, by = "otu_id") %>%
   mutate_at(vars(-c(otu_id, otu, genome)), list(~./sum(.))) %>%
   inner_join(orgs_prob, by = "otu_id") %>%
-  mutate_at(vars(-c(otu_id, genome, otu, orthology_id, overall_prob)), list(~.*overall_prob)) %>%
+  mutate_at(vars(-c(otu_id, genome, otu, orthology_id, overall_prob)), list(~(.*overall_prob)/sum(.*overall_prob))) %>%
   group_by(orthology_id) %>%
   summarize_at(vars(-c(otu_id, genome, otu, overall_prob)), sum)
