@@ -88,3 +88,47 @@ as_keggerator.phyloseq <- function(ps, ...){
 
   return(output)
 }
+
+
+keggerator <- R6::R6Class(
+  "keggerator",
+  public = list(
+    ps = NULL,
+    tax_tbl = NULL,
+    otu_tbl = NULL,
+    sam_tbl = NULL,
+    otu_ref = NULL,
+    orgs_tbl = NULL,
+    species_uncert = NULL,
+    orgs_id = NULL,
+    kegg_uncert = NULL,
+    total_uncert = NULL,
+    orgs_filt = NULL,
+    orgs_enzymes = NULL,
+    orgs_orthologies = NULL,
+
+    initialize = function(ps){
+      stopifnot(inherits(ps, "phyloseq"))
+      cat("Intializing KEGGerator...\n")
+      tictoc::tic("Finished Converting phyloseq object")
+      self$ps <- ps
+      cat("Converting Tax Table\n")
+      tictoc::tic("Finished Converting Tax Table")
+      self$tax_tbl <- tax_tibble(ps)
+      tictoc::toc()
+      cat("Converting OTU table\n")
+      tictoc::tic("Finished Converting OTU Table")
+      self$otu_tbl <- otu_tibble(ps)
+      tictoc::toc()
+      cat("Converting Sample Table\n")
+      tictoc::tic("Finished Converting Sample Table")
+      self$sam_tbl <- sam_tibble(ps)
+      tictoc::toc()
+      cat("Creating OTU Reference\n")
+      tictoc::tic("Finished Creating OTU Reference")
+      self$otu_ref <- otu_ref(ps)
+      tictoc::toc()
+      tictoc::toc()
+    }
+  )
+)
