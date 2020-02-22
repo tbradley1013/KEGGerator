@@ -46,7 +46,9 @@ keggerator <- R6::R6Class(
       self$otu_ref <- otu_ref(ps)
       tictoc::toc()
       tictoc::toc()
-    }
+    },
+
+
   )
 )
 null_check_req <- function(x, .f){
@@ -61,6 +63,28 @@ null_check_opt <- function(x, .f) {
   .f(x)
 }
 
+verbose <- function(msg, expr){
+  cat(glue::glue("{msg}"), "\n")
+  tictoc::tic(glue::glue("Finished {msg}"))
+  fn <- exprToFunction(expr)
+  out <- fn()
+  tictoc::toc()
+  return(out)
+}
+
+# From Shiny
+makeFunction <- function(args = pairlist(), body, env = parent.frame()) {
+  eval(call("function", args, body), env)
+}
+
+exprToFunction <- function(expr, env=parent.frame(), quoted=FALSE) {
+  if (!quoted) {
+    expr <- eval(substitute(substitute(expr)), parent.frame())
+  }
+
+  # expr is a quoted expression
+  makeFunction(body=expr, env=env)
+}
 #' Convert an object into class keggerator
 #'
 #' @param ps a phyloseq object to be converted to a keggerator object
