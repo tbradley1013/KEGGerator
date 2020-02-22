@@ -19,7 +19,9 @@ Imports:
     stringr,
     ggplot2,
     plotly,
-    crayon
+    crayon,
+    tictoc,
+    glue
 RoxygenNote: 6.1.1
 Suggests: 
     knitr,
