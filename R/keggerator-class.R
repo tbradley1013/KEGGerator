@@ -26,6 +26,21 @@ keggerator <- R6::R6Class(
 
     initialize = function(ps){
       stopifnot(inherits(ps, "phyloseq"))
+      # browser()
+      # verbose("Intializing KEGGerator...", {
+      #   verbose("Converting Tax Table", {
+      #     self$tax_tbl <- tax_tibble(ps)
+      #   })
+      #   verbose("Converting OTU table", {
+      #     self$otu_tbl <- otu_tibble(ps)
+      #   })
+      #   verbose("Converting Sample Table", {
+      #     self$sam_tbl <- sam_tibble(ps)
+      #   })
+      #   verbose("Creating OTU Reference", {
+      #     self$otu_ref <- otu_ref(ps)
+      #   })
+      # })
       cat("Intializing KEGGerator...\n")
       tictoc::tic("Finished Converting phyloseq object")
       self$ps <- ps
@@ -46,11 +61,12 @@ keggerator <- R6::R6Class(
       self$otu_ref <- otu_ref(ps)
       tictoc::toc()
       tictoc::toc()
-    },
+    }
 
 
   )
 )
+
 null_check_req <- function(x, .f){
   if (is.null(x)) return(FALSE)
 
