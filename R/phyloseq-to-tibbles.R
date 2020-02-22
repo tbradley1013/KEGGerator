@@ -79,12 +79,7 @@ tax_tibble.phyloseq <- function(data){
   tax <- phyloseq::tax_table(data)
   id_match <- check_otu_id(data)
 
-  output <- tax %>%
-    as.data.frame() %>%
-    tibble::rownames_to_column("otu") %>%
-    tibble::as_tibble() %>%
-    dplyr::mutate(otu_id = dplyr::row_number()) %>%
-    dplyr::select(otu_id, otu, dplyr::everything())
+  output <- tax_to_tbl(tax)
 
   class(output) <- c("tax_tbl", class(output))
   attr(output, "id_match") <- id_match
@@ -99,13 +94,7 @@ tax_tibble.taxonomyTable <- function(data, quiet = FALSE){
 
   if (!quiet) warning("Passing an otu_table directly to otu_tibble does not allow for verification that OTU names and order match between otu_table and tax_table", call. = FALSE)
 
-
-  output <- tax %>%
-    as.data.frame() %>%
-    tibble::rownames_to_column("otu") %>%
-    tibble::as_tibble() %>%
-    dplyr::mutate(otu_id = dplyr::row_number()) %>%
-    dplyr::select(otu_id, otu, dplyr::everything())
+  output <- tax_to_tbl(tax)
 
   class(output) <- c("tax_tbl", class(output))
   attr(output, "id_match") <- NULL
@@ -113,6 +102,25 @@ tax_tibble.taxonomyTable <- function(data, quiet = FALSE){
   return(output)
 }
 
+tax_to_tbl <- function(data){
+  cols <- attr(data, "dimnames")[[2]]
+  otus <- attr(data, "dimnames")[[1]]
+
+  out <- purrr::imap_dfc(cols, ~{
+    dat <- tibble::tibble(
+      col = unname(data@.Data[, .y])
+    )
+    colnames(dat) <- .x
+    return(dat)
+  })
+
+  out$otu <- otus
+  out$otu_id <- seq_along(otus)
+
+  out <- out[, c("otu", "otu_id", cols)]
+
+  return(out)
+}
 
 #' Convert sam_data to tibble
 #'
@@ -173,7 +181,7 @@ otu_ref.phyloseq <- function(data){
   ids_match <- check_otu_id(data)
   if (!ids_match) stop("The OTU names do not match between the tax_table and otu_table in phyloseq object provided", call. = FALSE)
 
-  otus <- rownames(tax_table(data))
+  otus <- rownames(phyloseq::tax_table(data))
 
   output <- tibble::tibble(
     otu_id = seq_along(otus),
