@@ -114,7 +114,7 @@ as_keggerator <- function(ps, ...){
 #' @describeIn as_keggerator method for phyloseq objects
 #' @export
 as_keggerator.phyloseq <- function(ps, ...){
-  output <- keggerator@new(ps)
+  output <- keggerator$new(ps)
   return(output)
 }
 
